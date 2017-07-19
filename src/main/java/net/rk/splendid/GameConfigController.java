@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/game")
-public class GameConfigController {
+public final class GameConfigController {
   @RequestMapping("/getConfig")
   public GameConfig getGameConfig(@RequestParam("id") String gameRefId) {
     return new GameConfig(new GameRef(gameRefId));

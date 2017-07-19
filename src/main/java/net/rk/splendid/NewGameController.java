@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.UUID;
 
 @RestController
-public class NewGameController {
+public final class NewGameController {
   @RequestMapping("/new")
   public GameRef newGame(
       @RequestParam("playerName") String playerName,
