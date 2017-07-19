@@ -1,0 +1,9 @@
+.gradle/
+.idea/
+build/
+gradle/
+gradlew
+out/
+splendid-srv.iml
+splendid-srv.ipr
+splendid-srv.iws
