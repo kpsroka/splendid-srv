@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+
+  "title": "ResourceFactory",
+  "type": "object",
+
+  "properties": {
+    "color": {
+      "type": { "$ref": "Resource.json" }
+    },
+    "cost": {
+      "type": "array",
+      "items": {
+        "type": { "$ref": "Resource.json" }
+      }
+    },
+    "points": {
+      "type": "number"
+    }
+  },
+  "required": ["color", "cost", "points"]
+}

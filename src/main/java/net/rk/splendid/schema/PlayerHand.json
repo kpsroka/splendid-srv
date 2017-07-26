@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+
+  "title": "PlayerHand",
+  "type": "object",
+  "properties": {
+    "factories": {
+      "type": "array",
+      "items": {
+        "type": { "$ref": "ResourceFactory.json" }
+      }
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": { "$ref": "Resource.json" }
+      }
+    }
+  },
+  "required": ["factories", "resources"]
+}

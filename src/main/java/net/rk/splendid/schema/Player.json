@@ -1,0 +1,15 @@
+{
+  "$schema":  "http://json-schema.org/schema#",
+
+  "title": "Player",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "hand": {
+      "type": { "$ref": "PlayerHand.json" }
+    }
+  },
+  "required": ["name", "hand"]
+}

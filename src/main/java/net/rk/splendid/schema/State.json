@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+
+  "title": "UiMessage",
+  "type": "object",
+  "properties": {
+    "gameId": {
+      "type": "string"
+    },
+    "players": {
+      "type": "array",
+      "items": {
+        "type": { "$ref": "Player.json" }
+      }
+    },
+    "gameState": {
+      "type": { "$ref": "GameState.json" }
+    },
+    "ui": {
+      "type": { "$ref": "UiState.json" }
+    }
+  },
+  "required": ["players", "ui"]
+}
