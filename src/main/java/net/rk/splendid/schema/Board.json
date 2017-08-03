@@ -22,16 +22,50 @@
     "selection": {
       "oneOf": [
         {
-          "type": "array",
-          "items": {
-            "type": { "$ref": "Resource.json" }
-          }
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["NO_SELECTION"]
+            }
+          },
+          "required": ["type"],
+          "additionalProperties": false
         },
         {
-          "type": { "$ref": "ResourceFactorySelection.json" }
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["FACTORY_SELECTION"]
+            },
+            "selection": {
+              "type": { "$ref": "ResourceFactorySelection.json" }
+            }
+          },
+          "required": ["type", "selection"],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["RESOURCE_SELECTION"]
+            },
+            "selection": {
+              "type": "array",
+              "items": {
+                "type": { "$ref": "Resource.json" }
+              }
+            }
+          },
+          "required": ["type", "selection"],
+          "additionalProperties": false
         }
       ]
     }
   },
+
   "required": ["factoriesByRow", "resources", "selection"]
 }

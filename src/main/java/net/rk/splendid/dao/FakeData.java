@@ -20,7 +20,8 @@ final class FakeData {
         CreateRandomResourceFactoryRow(0),
         CreateRandomResourceFactoryRow(1),
         CreateRandomResourceFactoryRow(2)},
-        CreateRandomBoardResources());
+        CreateRandomBoardResources(),
+        new NoSelection());
   }
 
   private static ResourceFactory[] CreateRandomResourceFactoryRow(int row) {
