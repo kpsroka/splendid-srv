@@ -1,4 +1,4 @@
-package net.rk.splendid.dao;
+package net.rk.splendid.dto;
 
 public class NoSelection extends Selection {
   private static final String NO_SELECTION_TYPE = "NO_SELECTION";

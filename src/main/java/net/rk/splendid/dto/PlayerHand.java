@@ -1,4 +1,4 @@
-package net.rk.splendid.dao;
+package net.rk.splendid.dto;
 
 public final class PlayerHand {
   private final ResourceFactory[] factories;

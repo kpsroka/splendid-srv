@@ -1,8 +1,8 @@
 package net.rk.splendid;
 
-import net.rk.splendid.dao.GameConfig;
-import net.rk.splendid.dao.GameRef;
-import net.rk.splendid.dao.GameState;
+import net.rk.splendid.dto.GameConfig;
+import net.rk.splendid.dto.GameRef;
+import net.rk.splendid.dto.GameState;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

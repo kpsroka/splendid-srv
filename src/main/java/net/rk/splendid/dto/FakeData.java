@@ -1,4 +1,4 @@
-package net.rk.splendid.dao;
+package net.rk.splendid.dto;
 
 import java.util.Random;
 import java.util.stream.IntStream;
