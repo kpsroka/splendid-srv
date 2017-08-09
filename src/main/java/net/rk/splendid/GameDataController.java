@@ -19,4 +19,13 @@ public final class GameDataController {
   public GameState getGameState(@RequestParam("id") String gameRefId) {
     return new GameState(gameRefId);
   }
+
+  @RequestMapping("/act")
+  public GameState executePlayerAction(
+      @RequestParam("id") String gameRefId,
+      @RequestParam("action") String action,
+      @RequestParam("player") int playerIndex,
+      @RequestParam("payload") String payload) {
+    return new GameState(gameRefId);
+  }
 }
