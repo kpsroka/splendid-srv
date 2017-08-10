@@ -29,7 +29,11 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    appengineSdk("com.google.appengine:appengine-java-sdk:1.9.54")
+    compile("com.google.guava:guava:19.0")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("com.google.appengine:appengine-endpoints:1.9.54")
+    compile("com.googlecode.objectify:objectify:5.1.21")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
