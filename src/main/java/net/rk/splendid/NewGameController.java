@@ -1,8 +1,10 @@
 package net.rk.splendid;
 
+import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.exceptions.PlayerCountOutOfRangeException;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +24,6 @@ public final class NewGameController {
       throw new PlayerCountOutOfRangeException(playerCount);
     }
 
-    return new GameRef(UUID.randomUUID().toString());
+    return GameDao.createGame(playerCount);
   }
 }
