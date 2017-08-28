@@ -1,5 +1,7 @@
 package net.rk.splendid.dto;
 
+import java.util.Arrays;
+
 public final class ResourceFactory {
   private final int color;
   private final int[] cost;
@@ -21,5 +23,9 @@ public final class ResourceFactory {
 
   public int getPoints() {
     return points;
+  }
+
+  ResourceFactory createDeepCopy() {
+    return new ResourceFactory(color, cost.clone(), points);
   }
 }

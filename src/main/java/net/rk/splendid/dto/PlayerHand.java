@@ -1,8 +1,10 @@
 package net.rk.splendid.dto;
 
+import java.util.Arrays;
+
 public final class PlayerHand {
-  private final ResourceFactory[] factories;
-  private final int[] resources;
+  private ResourceFactory[] factories;
+  private int[] resources;
 
   public PlayerHand(ResourceFactory[] factories, int[] resources) {
     this.factories = factories;
@@ -15,5 +17,18 @@ public final class PlayerHand {
 
   public int[] getResources() {
     return resources;
+  }
+
+  PlayerHand createDeepCopy() {
+    return new PlayerHand(
+        Arrays.stream(factories)
+            .map(ResourceFactory::createDeepCopy)
+            .toArray(ResourceFactory[]::new),
+        resources.clone()
+        );
+  }
+
+  public void setResources(int[] resources) {
+    this.resources = resources;
   }
 }

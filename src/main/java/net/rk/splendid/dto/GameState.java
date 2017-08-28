@@ -1,5 +1,7 @@
 package net.rk.splendid.dto;
 
+import java.util.Arrays;
+
 public final class GameState {
   private final int round;
   private final Board board;
@@ -28,5 +30,13 @@ public final class GameState {
 
   public PlayerState[] getPlayerState() {
     return playerState;
+  }
+
+  public GameState createDeepCopy() {
+    PlayerState[] newPlayerState = Arrays.stream(playerState)
+        .map(PlayerState::createDeepCopy)
+        .toArray(PlayerState[]::new);
+
+    return new GameState(this.round, this.board.createDeepCopy(), newPlayerState);
   }
 }

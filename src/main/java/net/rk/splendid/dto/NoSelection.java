@@ -7,4 +7,7 @@ public class NoSelection extends Selection {
   public String getType() {
     return NO_SELECTION_TYPE;
   }
+
+  @Override
+  public Selection createDeepCopy() { return this; }
 }

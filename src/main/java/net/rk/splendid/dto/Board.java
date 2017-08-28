@@ -1,9 +1,12 @@
 package net.rk.splendid.dto;
 
+import java.util.Arrays;
+import java.util.List;
+
 public final class Board {
-  private final ResourceFactory[][] factoriesByRow;
-  private final int[] resources;
-  private final Selection selection;
+  private ResourceFactory[][] factoriesByRow;
+  private int[] resources;
+  private Selection selection;
 
   public Board(ResourceFactory[][] factoriesByRow, int[] resources, Selection selection) {
     this.factoriesByRow = factoriesByRow;
@@ -21,5 +24,20 @@ public final class Board {
 
   public Selection getSelection() {
     return selection;
+  }
+
+  Board createDeepCopy() {
+    return new Board(
+        Arrays.stream(factoriesByRow).map(
+            factoryRow -> Arrays.stream(factoryRow)
+                .map(ResourceFactory::createDeepCopy)
+                .toArray(ResourceFactory[]::new))
+            .toArray(ResourceFactory[][]::new),
+        resources.clone(),
+        selection.createDeepCopy());
+  }
+
+  public void setResources(int[] resources) {
+    this.resources = resources;
   }
 }
