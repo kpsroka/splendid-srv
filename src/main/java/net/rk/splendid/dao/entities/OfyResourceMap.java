@@ -36,4 +36,17 @@ class OfyResourceMap {
 
     return ofyResourceMap;
   }
+
+  static int[] toResourceArray(OfyResourceMap ofyResourceMap) {
+    return ofyResourceMap.resourceMap.entrySet().stream()
+        .map((e) -> createFilledArray(e.getValue(), e.getKey()))
+        .flatMapToInt(Arrays::stream)
+        .toArray();
+  }
+
+  private static int[] createFilledArray(Long length, Integer value) {
+    int[] array = new int[length.intValue()];
+    Arrays.fill(array, value);
+    return array;
+  }
 }

@@ -17,4 +17,11 @@ class OfyResourceFactory {
 
     return ofyResourceFactory;
   }
+
+  public static ResourceFactory toDto(OfyResourceFactory ofyResourceFactory) {
+    return new ResourceFactory(
+        ofyResourceFactory.color,
+        OfyResourceMap.toResourceArray(ofyResourceFactory.cost),
+        ofyResourceFactory.points);
+  }
 }

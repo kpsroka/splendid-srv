@@ -5,7 +5,7 @@ public final class Board {
   private final int[] resources;
   private final Selection selection;
 
-  Board(ResourceFactory[][] factoriesByRow, int[] resources, Selection selection) {
+  public Board(ResourceFactory[][] factoriesByRow, int[] resources, Selection selection) {
     this.factoriesByRow = factoriesByRow;
     this.resources = resources;
     this.selection = selection;

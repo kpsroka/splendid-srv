@@ -18,7 +18,7 @@ public final class GameDataController {
 
   @RequestMapping("/getState")
   public GameState getGameState(@RequestParam("id") String gameRefId) {
-    return new GameState(gameRefId);
+    return GameDao.getGameState(gameRefId);
   }
 
   @RequestMapping("/act")
@@ -27,6 +27,6 @@ public final class GameDataController {
       @RequestParam("action") String action,
       @RequestParam("player") int playerIndex,
       @RequestParam("payload") String payload) {
-    return new GameState(gameRefId);
+    return new GameState();
   }
 }

@@ -13,4 +13,8 @@ class OfyPlayerState {
 
     return ofyPlayerState;
   }
+
+  public static PlayerState toDto(OfyPlayerState ofyPlayerState) {
+    return new PlayerState(OfyPlayerHand.toDto(ofyPlayerState.playerHand));
+  }
 }

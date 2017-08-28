@@ -2,6 +2,7 @@ package net.rk.splendid.dao.entities;
 
 import com.google.common.collect.Lists;
 import net.rk.splendid.dto.PlayerHand;
+import net.rk.splendid.dto.ResourceFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,5 +24,11 @@ class OfyPlayerHand {
     ofyPlayerHand.resources = OfyResourceMap.fromResourceArray(hand.getResources());
 
     return ofyPlayerHand;
+  }
+
+  public static PlayerHand toDto(OfyPlayerHand ofyPlayerHand) {
+    return new PlayerHand(
+        ofyPlayerHand.factories.stream().map(OfyResourceFactory::toDto).toArray(ResourceFactory[]::new),
+        OfyResourceMap.toResourceArray(ofyPlayerHand.resources));
   }
 }
