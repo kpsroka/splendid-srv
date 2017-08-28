@@ -27,4 +27,6 @@ public class GameEntity {
   public String getId() {
     return gameRefId;
   }
+  public OfyGameConfig getGameConfig() { return gameConfig; }
+  public OfyGameState getGameState() { return gameState; }
 }

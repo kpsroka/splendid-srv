@@ -1,7 +1,10 @@
 package net.rk.splendid.dao;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import net.rk.splendid.dao.entities.GameEntity;
+import net.rk.splendid.dao.entities.OfyGameConfig;
+import net.rk.splendid.dao.entities.OfyNoSelection;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.dto.GameState;
@@ -15,6 +18,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 public final class GameDao {
   static {
     ObjectifyService.register(GameEntity.class);
+    ObjectifyService.register(OfyNoSelection.class);
   }
 
   private GameDao() {}
@@ -37,5 +41,11 @@ public final class GameDao {
     ofy().save().entity(entity).now();
 
     return new GameRef(entity.getId());
+  }
+
+  public static GameConfig getGameConfig(String gameRefId) {
+    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
+    GameEntity gameEntity = ofy().load().key(gameRefKey).now();
+    return OfyGameConfig.toDto(gameRefId, gameEntity.getGameConfig());
   }
 }

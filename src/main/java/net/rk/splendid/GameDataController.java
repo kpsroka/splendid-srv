@@ -1,5 +1,6 @@
 package net.rk.splendid;
 
+import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.dto.GameState;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public final class GameDataController {
   @RequestMapping("/getConfig")
   public GameConfig getGameConfig(@RequestParam("id") String gameRefId) {
-    return new GameConfig(new GameRef(gameRefId));
+    return GameDao.getGameConfig(gameRefId);
   }
 
   @RequestMapping("/getState")

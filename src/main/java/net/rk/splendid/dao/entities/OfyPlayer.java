@@ -14,4 +14,8 @@ class OfyPlayer {
   static OfyPlayer fromDto(Player player) {
     return new OfyPlayer(player);
   }
+
+  static Player toDto(OfyPlayer ofyPlayer) {
+    return new Player(ofyPlayer.name);
+  }
 }
