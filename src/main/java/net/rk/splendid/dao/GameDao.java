@@ -4,10 +4,13 @@ import com.googlecode.objectify.ObjectifyService;
 import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
+import net.rk.splendid.dto.GameState;
 import net.rk.splendid.dto.Player;
 
 import java.util.Arrays;
 import java.util.UUID;
+
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public final class GameDao {
   static {
@@ -25,10 +28,13 @@ public final class GameDao {
 
   public static GameRef createGame(int numberOfPlayers) {
     Player[] players = Arrays.copyOf(FIXED_PLAYERS, numberOfPlayers);
+    String gameRefId = UUID.randomUUID().toString();
     GameEntity entity =
-        new GameEntity(new GameConfig(new GameRef(UUID.randomUUID().toString()), players));
+        new GameEntity(
+            new GameConfig(new GameRef(gameRefId), players),
+            new GameState(gameRefId));
 
-    ObjectifyService.ofy().save().entity(entity).now();
+    ofy().save().entity(entity).now();
 
     return new GameRef(entity.getId());
   }

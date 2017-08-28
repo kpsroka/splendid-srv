@@ -4,7 +4,10 @@ import com.google.common.collect.Maps;
 import com.googlecode.objectify.annotation.Stringify;
 import com.googlecode.objectify.stringifier.Stringifier;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 class IntegerStringifier implements Stringifier<Integer> {
 
@@ -21,5 +24,16 @@ class IntegerStringifier implements Stringifier<Integer> {
 
 class OfyResourceMap {
   @Stringify(IntegerStringifier.class)
-  Map<Integer, Integer> resourceMap = Maps.newHashMap();
+  Map<Integer, Long> resourceMap = Maps.newHashMap();
+
+  private OfyResourceMap() {}
+
+  static OfyResourceMap fromResourceArray(int[] resources) {
+    OfyResourceMap ofyResourceMap = new OfyResourceMap();
+    ofyResourceMap.resourceMap = Arrays.stream(resources)
+        .boxed()
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+    return ofyResourceMap;
+  }
 }

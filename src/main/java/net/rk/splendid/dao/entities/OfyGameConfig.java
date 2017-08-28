@@ -1,12 +1,7 @@
 package net.rk.splendid.dao.entities;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.ObjectArrays;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
 import net.rk.splendid.dto.GameConfig;
-import net.rk.splendid.dto.GameRef;
-import net.rk.splendid.dto.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +12,13 @@ class OfyGameConfig {
 
   private OfyGameConfig() {}
 
-  OfyGameConfig(GameConfig gameCfg) {
-    players = Arrays.stream(gameCfg.getPlayers())
-        .map(OfyPlayer::fromDto)
-        .collect(Collectors.toList());
+  static OfyGameConfig fromDto(GameConfig gameCfg) {
+    OfyGameConfig ofyGameConfig = new OfyGameConfig();
+    ofyGameConfig.players =
+        Arrays.stream(gameCfg.getPlayers())
+            .map(OfyPlayer::fromDto)
+            .collect(Collectors.toList());
+
+    return ofyGameConfig;
   }
 }
