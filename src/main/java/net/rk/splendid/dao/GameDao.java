@@ -55,4 +55,11 @@ public final class GameDao {
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
     return OfyGameState.toDto(gameEntity.getGameState());
   }
+
+  public static void updateGameState(String gameRefId, GameState newState) {
+    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
+    GameEntity gameEntity = ofy().load().key(gameRefKey).now();
+    gameEntity.setGameState(OfyGameState.fromDto(newState));
+    ofy().save().entity(gameEntity);
+  }
 }

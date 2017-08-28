@@ -12,7 +12,7 @@ public class OfyGameState {
 
   private OfyGameState() {}
 
-  static OfyGameState fromDto(GameState gameState) {
+  public static OfyGameState fromDto(GameState gameState) {
     OfyGameState ofyGameState = new OfyGameState();
     ofyGameState.round = gameState.getRound();
     ofyGameState.board = OfyBoard.fromDto(gameState.getBoard());

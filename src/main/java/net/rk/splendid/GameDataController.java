@@ -2,8 +2,8 @@ package net.rk.splendid;
 
 import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dto.GameConfig;
-import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.dto.GameState;
+import net.rk.splendid.game.GameActions;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +27,9 @@ public final class GameDataController {
       @RequestParam("action") String action,
       @RequestParam("player") int playerIndex,
       @RequestParam("payload") String payload) {
-    return new GameState();
+    GameState oldState = GameDao.getGameState(gameRefId);
+    GameState newState = GameActions.GetAction(action, payload).apply(oldState);
+    GameDao.updateGameState(gameRefId, newState);
+    return newState;
   }
 }

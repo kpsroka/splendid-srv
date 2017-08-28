@@ -29,4 +29,7 @@ public class GameEntity {
   }
   public OfyGameConfig getGameConfig() { return gameConfig; }
   public OfyGameState getGameState() { return gameState; }
+  public void setGameState(OfyGameState gameState) {
+    this.gameState = gameState;
+  }
 }
