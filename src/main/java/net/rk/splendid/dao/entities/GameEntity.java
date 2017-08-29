@@ -13,11 +13,6 @@ public class GameEntity {
 
   public GameEntity() {}
 
-  public GameEntity(GameConfig gameCfg) {
-    this.gameRefId = gameCfg.getRef().getId();
-    this.gameConfig = OfyGameConfig.fromDto(gameCfg);
-  }
-
   public GameEntity(GameConfig gameCfg, GameState gameState) {
     this.gameRefId = gameCfg.getRef().getId();
     this.gameConfig = OfyGameConfig.fromDto(gameCfg);
