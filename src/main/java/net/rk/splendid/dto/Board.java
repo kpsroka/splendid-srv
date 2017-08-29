@@ -1,7 +1,6 @@
 package net.rk.splendid.dto;
 
 import java.util.Arrays;
-import java.util.List;
 
 public final class Board {
   private ResourceFactory[][] factoriesByRow;
@@ -39,5 +38,9 @@ public final class Board {
 
   public void setResources(int[] resources) {
     this.resources = resources;
+  }
+
+  public void setFactories(ResourceFactory[][] factories) {
+    this.factoriesByRow = factories;
   }
 }

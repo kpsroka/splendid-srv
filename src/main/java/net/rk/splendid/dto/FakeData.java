@@ -4,7 +4,9 @@ import java.util.Random;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-final class FakeData {
+public final class FakeData {
+  private FakeData() {}
+
   static final Player[] FIXED_PLAYERS = new Player[]{
       new Player("Adam"),
       new Player("Barbara"),
@@ -31,7 +33,7 @@ final class FakeData {
             .toArray(ResourceFactory[]::new);
   }
 
-  private static ResourceFactory CreateRandomResourceFactory(int row) {
+  public static ResourceFactory CreateRandomResourceFactory(int row) {
     return new ResourceFactory(
         (new Random()).nextInt(COLOR_COUNT),
         CreateRandomCost(GetMinCostForRow(row), GetMaxCostForRow(row)),

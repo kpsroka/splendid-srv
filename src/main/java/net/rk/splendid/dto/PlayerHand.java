@@ -31,4 +31,8 @@ public final class PlayerHand {
   public void setResources(int[] resources) {
     this.resources = resources;
   }
+
+  public void setFactories(ResourceFactory[] factories) {
+    this.factories = factories;
+  }
 }
