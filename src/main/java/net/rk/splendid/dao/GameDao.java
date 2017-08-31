@@ -32,16 +32,21 @@ public final class GameDao {
   };
 
   public static GameRef createGame(int numberOfPlayers) {
-    Player[] players = Arrays.copyOf(FIXED_PLAYERS, numberOfPlayers);
+    Player[] players = new Player[numberOfPlayers];
+    Arrays.setAll(players, i -> FIXED_PLAYERS[i]);
+    String[] playerRefs = new String[numberOfPlayers];
+    Arrays.setAll(playerRefs, i -> UUID.randomUUID().toString());
+
     String gameRefId = UUID.randomUUID().toString();
     GameEntity entity =
         new GameEntity(
             new GameConfig(new GameRef(gameRefId), players),
-            new GameState());
+            new GameState(),
+            playerRefs);
 
     ofy().save().entity(entity).now();
 
-    return new GameRef(entity.getId());
+    return new GameRef(entity.getId(), playerRefs[0]);
   }
 
   public static GameConfig getGameConfig(String gameRefId) {

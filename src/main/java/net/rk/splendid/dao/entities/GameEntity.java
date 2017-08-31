@@ -7,23 +7,27 @@ import net.rk.splendid.dto.GameState;
 
 @Entity
 public class GameEntity {
-  @Id String gameRefId;
-  OfyGameConfig gameConfig;
-  OfyGameState gameState;
+  private @Id String gameRefId;
+  private OfyGameConfig gameConfig;
+  private OfyGameState gameState;
 
   public GameEntity() {}
 
-  public GameEntity(GameConfig gameCfg, GameState gameState) {
-    this.gameRefId = gameCfg.getRef().getGameId();
-    this.gameConfig = OfyGameConfig.fromDto(gameCfg);
+  public GameEntity(GameConfig gameConfig, GameState gameState, String[] playerTokens) {
+    this.gameRefId = gameConfig.getRef().getGameId();
+    this.gameConfig = OfyGameConfig.fromDto(gameConfig, playerTokens);
     this.gameState = OfyGameState.fromDto(gameState);
   }
 
   public String getId() {
     return gameRefId;
   }
-  public OfyGameConfig getGameConfig() { return gameConfig; }
-  public OfyGameState getGameState() { return gameState; }
+  public OfyGameConfig getGameConfig() {
+    return gameConfig;
+  }
+  public OfyGameState getGameState() {
+    return gameState;
+  }
   public void setGameState(OfyGameState gameState) {
     this.gameState = gameState;
   }

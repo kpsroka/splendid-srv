@@ -3,16 +3,18 @@ package net.rk.splendid.dao.entities;
 import net.rk.splendid.dto.Player;
 
 class OfyPlayer {
-  String name;
+  private String name;
+  int index;
 
   OfyPlayer() {}
 
-  private OfyPlayer(Player player) {
+  private OfyPlayer(Player player, int playerIndex) {
     this.name = player.getName();
+    this.index = playerIndex;
   }
 
-  static OfyPlayer fromDto(Player player) {
-    return new OfyPlayer(player);
+  static OfyPlayer fromDto(Player player, int index) {
+    return new OfyPlayer(player, index);
   }
 
   static Player toDto(OfyPlayer ofyPlayer) {
