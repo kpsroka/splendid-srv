@@ -32,4 +32,11 @@ public final class GameDataController {
     GameDao.updateGameState(gameRefId, newState);
     return newState;
   }
+
+  @RequestMapping("/join")
+  public GameConfig joinGame(
+      @RequestParam("id") String gameRefId,
+      @RequestParam("playerName") String playerName) {
+    return GameDao.getGameConfig(gameRefId);
+  }
 }
