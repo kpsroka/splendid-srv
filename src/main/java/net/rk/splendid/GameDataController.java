@@ -4,39 +4,48 @@ import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameState;
 import net.rk.splendid.game.GameActions;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/game")
 public final class GameDataController {
+  @ModelAttribute
+  public void handleCommonAttributes(
+      CommonSessionParameters commonSessionParameters,
+      @RequestParam("id") String gameRefId,
+      @RequestParam(value = "playerToken", required = false) String playerToken) {
+    commonSessionParameters.setGameRef(gameRefId);
+    commonSessionParameters.setPlayerToken(playerToken);
+  }
+
   @RequestMapping("/getConfig")
-  public GameConfig getGameConfig(@RequestParam("id") String gameRefId) {
-    return GameDao.getGameConfig(gameRefId);
+  public GameConfig getGameConfig(CommonSessionParameters sessionParams) {
+    return GameDao.getGameConfig(sessionParams.getGameRef());
   }
 
   @RequestMapping("/getState")
-  public GameState getGameState(@RequestParam("id") String gameRefId) {
-    return GameDao.getGameState(gameRefId);
+  public GameState getGameState(CommonSessionParameters sessionParams) {
+    return GameDao.getGameState(sessionParams.getGameRef());
   }
 
   @RequestMapping("/act")
   public GameState executePlayerAction(
-      @RequestParam("id") String gameRefId,
+      CommonSessionParameters sessionParams,
       @RequestParam("action") String action,
-      @RequestParam("playerToken") String playerToken,
       @RequestParam("payload") String payload) {
-    GameState oldState = GameDao.getGameState(gameRefId);
+    GameState oldState = GameDao.getGameState(sessionParams.getGameRef());
     GameState newState = GameActions.GetAction(action, payload).apply(oldState);
-    GameDao.updateGameState(gameRefId, newState);
+    GameDao.updateGameState(sessionParams.getGameRef(), newState);
     return newState;
   }
 
   @RequestMapping("/join")
   public GameConfig joinGame(
-      @RequestParam("id") String gameRefId,
+      CommonSessionParameters sessionParams,
       @RequestParam("playerName") String playerName) {
-    return GameDao.getGameConfig(gameRefId);
+    return GameDao.getGameConfig(sessionParams.getGameRef());
   }
 }
