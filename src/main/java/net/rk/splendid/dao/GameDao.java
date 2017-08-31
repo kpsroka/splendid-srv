@@ -17,11 +17,6 @@ import java.util.UUID;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public final class GameDao {
-  static {
-    ObjectifyService.register(GameEntity.class);
-    ObjectifyService.register(OfyNoSelection.class);
-  }
-
   private GameDao() {}
 
   private static final Player[] FIXED_PLAYERS = new Player[] {
