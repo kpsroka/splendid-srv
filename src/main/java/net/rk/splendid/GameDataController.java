@@ -25,7 +25,7 @@ public final class GameDataController {
   public GameState executePlayerAction(
       @RequestParam("id") String gameRefId,
       @RequestParam("action") String action,
-      @RequestParam("player") int playerIndex,
+      @RequestParam("playerToken") String playerToken,
       @RequestParam("payload") String payload) {
     GameState oldState = GameDao.getGameState(gameRefId);
     GameState newState = GameActions.GetAction(action, payload).apply(oldState);
