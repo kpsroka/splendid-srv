@@ -13,7 +13,7 @@ public final class GameRef {
     this.playerToken = playerToken;
   }
 
-  public String getId() {
+  public String getGameId() {
     return this.gameId;
   }
 
