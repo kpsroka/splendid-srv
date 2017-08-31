@@ -4,10 +4,6 @@ public final class GameConfig {
   private final GameRef gameRef;
   private final Player[] players;
 
-  public GameConfig(GameRef gameRef) {
-    this(gameRef, FakeData.FIXED_PLAYERS);
-  }
-
   public GameConfig(GameRef gameRef, Player[] players) {
     this.gameRef = gameRef;
     this.players = players;
