@@ -3,7 +3,7 @@ package net.rk.splendid.dao.entities;
 import net.rk.splendid.dto.PlayerState;
 
 class OfyPlayerState {
-  OfyPlayerHand playerHand;
+  private OfyPlayerHand playerHand;
 
   private OfyPlayerState() {}
 

@@ -3,9 +3,9 @@ package net.rk.splendid.dao.entities;
 import net.rk.splendid.dto.ResourceFactory;
 
 class OfyResourceFactory {
-  int color;
-  int points;
-  OfyResourceMap cost;
+  private int color;
+  private int points;
+  private OfyResourceMap cost;
 
   private OfyResourceFactory() {}
 

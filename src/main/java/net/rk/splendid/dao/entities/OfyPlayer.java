@@ -4,13 +4,17 @@ import net.rk.splendid.dto.Player;
 
 class OfyPlayer {
   private String name;
-  int index;
+  private int index;
 
-  OfyPlayer() {}
+  private OfyPlayer() {}
 
   private OfyPlayer(Player player, int playerIndex) {
     this.name = player.getName();
     this.index = playerIndex;
+  }
+
+  int getIndex() {
+    return index;
   }
 
   static OfyPlayer fromDto(Player player, int index) {

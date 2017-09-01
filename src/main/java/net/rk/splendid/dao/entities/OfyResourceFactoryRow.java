@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OfyResourceFactoryRow {
-  List<OfyResourceFactory> resourceFactoryList;
+class OfyResourceFactoryRow {
+  private List<OfyResourceFactory> resourceFactoryList;
 
   private OfyResourceFactoryRow() {}
 

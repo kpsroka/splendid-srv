@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class OfyPlayerHand {
-  List<OfyResourceFactory> factories = Lists.newArrayList();
-  OfyResourceMap resources;
+  private List<OfyResourceFactory> factories = Lists.newArrayList();
+  private OfyResourceMap resources;
 
   private OfyPlayerHand() {}
 

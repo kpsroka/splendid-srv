@@ -11,7 +11,7 @@ public class GameEntity {
   private OfyGameConfig gameConfig;
   private OfyGameState gameState;
 
-  public GameEntity() {}
+  private GameEntity() {}
 
   public GameEntity(GameConfig gameConfig, GameState gameState, String[] playerTokens) {
     this.gameRefId = gameConfig.getRef().getGameId();

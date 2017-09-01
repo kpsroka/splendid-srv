@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class OfyBoard {
-  List<OfyResourceFactoryRow> factoriesByRow;
-  OfyResourceMap resources;
-  OfySelection selection;
+  private List<OfyResourceFactoryRow> factoriesByRow;
+  private OfyResourceMap resources;
+  private OfySelection selection;
 
   static OfyBoard fromDto(Board board) {
     OfyBoard ofyBoard = new OfyBoard();

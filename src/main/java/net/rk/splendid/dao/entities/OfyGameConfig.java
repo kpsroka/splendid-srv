@@ -33,8 +33,8 @@ public class OfyGameConfig {
       String playerToken,
       OfyGameConfig ofyGameConfig) {
     List<OfyPlayer> playersList = new ArrayList<>(ofyGameConfig.players.values());
-    playersList.sort(Comparator.comparingInt(player -> player.index));
-    int firstPlayerIndex = ofyGameConfig.players.get(playerToken).index;
+    playersList.sort(Comparator.comparingInt(OfyPlayer::getIndex));
+    int firstPlayerIndex = ofyGameConfig.players.get(playerToken).getIndex();
     Collections.rotate(playersList, -firstPlayerIndex);
 
     return
