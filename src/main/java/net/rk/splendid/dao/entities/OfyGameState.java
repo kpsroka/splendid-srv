@@ -4,11 +4,14 @@ import net.rk.splendid.dto.GameState;
 import net.rk.splendid.dto.PlayerState;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class OfyGameState {
-  int round;
-  OfyBoard board;
-  OfyPlayerState[] playerState;
+  private int round;
+  private OfyBoard board;
+  private Map<String, OfyPlayerState> playerState = new HashMap<>();
 
   private OfyGameState() {}
 
@@ -18,8 +21,10 @@ public class OfyGameState {
     ofyGameState.board = OfyBoard.fromDto(gameState.getBoard());
     ofyGameState.playerState =
         Arrays.stream(gameState.getPlayerState())
-            .map(OfyPlayerState::fromDto)
-            .toArray(OfyPlayerState[]::new);
+            .collect(Collectors.toMap(
+                player -> "unset",
+                OfyPlayerState::fromDto
+            ));
 
     return ofyGameState;
   }
@@ -28,7 +33,7 @@ public class OfyGameState {
     return new GameState(
         ofyGameState.round,
         OfyBoard.toDto(ofyGameState.board),
-        Arrays.stream(ofyGameState.playerState)
+        ofyGameState.playerState.values().stream()
             .map(OfyPlayerState::toDto)
             .toArray(PlayerState[]::new)
     );
