@@ -1,10 +1,11 @@
 package net.rk.splendid.game;
 
 import com.google.common.primitives.Ints;
-import net.rk.splendid.dto.FakeData;
-import net.rk.splendid.dto.GameState;
-import net.rk.splendid.dto.PlayerHand;
-import net.rk.splendid.dto.ResourceFactory;
+import net.rk.splendid.dao.entities.OfyGameState;
+import net.rk.splendid.dao.entities.OfyPlayerHand;
+import net.rk.splendid.dao.entities.OfyResourceFactory;
+import net.rk.splendid.dao.entities.OfyResourceMap;
+import net.rk.splendid.dto.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,18 +14,45 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class TakeFactoryAction implements GameAction {
-  private final String payload;
+  private final int[] factoryCoords;
 
   TakeFactoryAction(String payload) {
-    this.payload = payload;
+    this.factoryCoords = Arrays.stream(payload.split(","))
+        .mapToInt(Integer::valueOf)
+        .toArray();
+  }
+
+  public OfyGameState apply(GameRef gameRef, OfyGameState gameState) {
+    if (factoryCoords.length != 2) {
+      throw new IllegalArgumentException(
+          "Invalid factory coords provided: " + Arrays.toString(factoryCoords));
+    }
+
+    OfyResourceFactory factory = gameState.getBoard().getFactory(factoryCoords[0], factoryCoords[1]);
+    OfyPlayerHand hand = gameState.getPlayerState(gameRef.getPlayerToken()).getHand();
+
+    OfyResourceMap remainingCost = factory.getCost().reduce(hand.getFactoryResources());
+
+    if (!remainingCost.isZero()) {
+      OfyResourceMap resourcesOnHand = hand.getResources();
+      if (resourcesOnHand.holds(remainingCost)) {
+        hand.setResources(remainingCost.reduce(remainingCost));
+      } else {
+        throw new IllegalStateException("Not enough resources to obtain factory.");
+      }
+    }
+
+    hand.addFactory(factory);
+    gameState.getBoard().setFactory(
+        factoryCoords[0],
+        factoryCoords[1],
+        OfyResourceFactory.fromDto(FakeData.CreateRandomResourceFactory(factoryCoords[0])));
+
+    return gameState;
   }
 
   @Override
   public GameState apply(GameState gameState) {
-    int[] factoryCoords = Arrays.stream(payload.split(","))
-        .mapToInt(Integer::valueOf)
-        .toArray();
-
     ResourceFactory[][] factories = gameState.getBoard().getFactoriesByRow();
 
     ResourceFactory factory = factories[factoryCoords[0]][factoryCoords[1]];

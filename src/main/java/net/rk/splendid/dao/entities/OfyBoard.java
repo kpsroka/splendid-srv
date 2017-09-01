@@ -2,12 +2,13 @@ package net.rk.splendid.dao.entities;
 
 import net.rk.splendid.dto.Board;
 import net.rk.splendid.dto.ResourceFactory;
+import org.springframework.util.Assert;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class OfyBoard {
+public class OfyBoard {
   private List<OfyResourceFactoryRow> factoriesByRow;
   private OfyResourceMap resources;
   private OfySelection selection;
@@ -30,5 +31,17 @@ class OfyBoard {
             .toArray(ResourceFactory[][]::new),
         OfyResourceMap.toResourceArray(ofyBoard.resources),
         OfySelection.toDto(ofyBoard.selection));
+  }
+
+  public OfyResourceFactory getFactory(int rowIndex, int itemIndex) {
+    OfyResourceFactoryRow factoryRow = factoriesByRow.get(rowIndex);
+    return factoryRow.getFactory(itemIndex);
+  }
+
+  public void setFactory(
+      int rowIndex,
+      int itemIndex,
+      OfyResourceFactory resourceFactory) {
+    factoriesByRow.get(rowIndex).setFactory(itemIndex, resourceFactory);
   }
 }

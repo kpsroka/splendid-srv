@@ -38,4 +38,16 @@ public class OfyGameState {
             .toArray(PlayerState[]::new)
     );
   }
+
+  public OfyBoard getBoard() {
+    return board;
+  }
+
+  public OfyPlayerState getPlayerState(String playerToken) {
+    if (playerState.containsKey(playerToken)) {
+      return playerState.get(playerToken);
+    } else {
+      throw new IllegalArgumentException("No player with token " + playerToken);
+    }
+  }
 }

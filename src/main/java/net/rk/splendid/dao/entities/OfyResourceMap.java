@@ -4,8 +4,7 @@ import com.google.common.collect.Maps;
 import com.googlecode.objectify.annotation.Stringify;
 import com.googlecode.objectify.stringifier.Stringifier;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -22,11 +21,15 @@ class IntegerStringifier implements Stringifier<Integer> {
   }
 }
 
-class OfyResourceMap {
+public class OfyResourceMap {
   @Stringify(IntegerStringifier.class)
-  Map<Integer, Long> resourceMap = Maps.newHashMap();
+  private Map<Integer, Long> resourceMap = Maps.newHashMap();
 
-  private OfyResourceMap() {}
+  OfyResourceMap() {}
+
+  private OfyResourceMap(OfyResourceMap source) {
+    this.resourceMap = new HashMap<>(source.resourceMap);
+  }
 
   static OfyResourceMap fromResourceArray(int[] resources) {
     OfyResourceMap ofyResourceMap = new OfyResourceMap();
@@ -48,5 +51,32 @@ class OfyResourceMap {
     int[] array = new int[length.intValue()];
     Arrays.fill(array, value);
     return array;
+  }
+
+  public OfyResourceMap increase(int resource, int value) {
+    OfyResourceMap increased = new OfyResourceMap(this);
+    increased.resourceMap.put(
+        resource,
+        increased.resourceMap.getOrDefault(resource, 0L) + value);
+    return increased;
+  }
+
+  public OfyResourceMap reduce(OfyResourceMap subtrahend) {
+    OfyResourceMap reduced = new OfyResourceMap(this);
+    reduced.resourceMap.replaceAll(
+        (key, minuend) -> Math.max(0L, minuend - subtrahend.resourceMap.getOrDefault(key, 0L)));
+    return reduced;
+  }
+
+  public boolean isZero() {
+    Set<Long> values = new HashSet<>(resourceMap.values());
+    return values.isEmpty() || (values.size() == 1 && values.contains(0L));
+  }
+
+  public boolean holds(OfyResourceMap other) {
+    return Maps.filterKeys(
+        other.resourceMap,
+        resource -> this.resourceMap.getOrDefault(resource, 0L) >= other.resourceMap.get(resource))
+        .isEmpty();
   }
 }

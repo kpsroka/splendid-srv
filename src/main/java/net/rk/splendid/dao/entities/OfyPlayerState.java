@@ -2,7 +2,7 @@ package net.rk.splendid.dao.entities;
 
 import net.rk.splendid.dto.PlayerState;
 
-class OfyPlayerState {
+public class OfyPlayerState {
   private OfyPlayerHand playerHand;
 
   private OfyPlayerState() {}
@@ -16,5 +16,9 @@ class OfyPlayerState {
 
   public static PlayerState toDto(OfyPlayerState ofyPlayerState) {
     return new PlayerState(OfyPlayerHand.toDto(ofyPlayerState.playerHand));
+  }
+
+  public OfyPlayerHand getHand() {
+    return playerHand;
   }
 }
