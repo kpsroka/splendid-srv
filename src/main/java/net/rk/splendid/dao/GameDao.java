@@ -52,13 +52,15 @@ public final class GameDao {
   }
 
   public GameConfig getGameConfigImpl() {
-    return GameDao.getGameConfig(sessionParamsProvider.getGameRef());
+    return GameDao.getGameConfig(
+        sessionParamsProvider.getGameRef(),
+        sessionParamsProvider.getPlayerToken());
   }
 
-  private static GameConfig getGameConfig(String gameRefId) {
+  private static GameConfig getGameConfig(String gameRefId, String playerToken) {
     Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-    return OfyGameConfig.toDto(gameRefId, gameEntity.getGameConfig());
+    return OfyGameConfig.toDto(gameRefId, playerToken, gameEntity.getGameConfig());
   }
 
   public GameState getGameStateImpl() {

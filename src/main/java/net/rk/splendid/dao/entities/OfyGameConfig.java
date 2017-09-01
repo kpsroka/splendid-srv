@@ -28,13 +28,18 @@ public class OfyGameConfig {
     return ofyGameConfig;
   }
 
-  public static GameConfig toDto(String gameRefId, OfyGameConfig ofyGameConfig) {
+  public static GameConfig toDto(
+      String gameRefId,
+      String playerToken,
+      OfyGameConfig ofyGameConfig) {
     List<OfyPlayer> playersList = new ArrayList<>(ofyGameConfig.players.values());
     playersList.sort(Comparator.comparingInt(player -> player.index));
+    int firstPlayerIndex = ofyGameConfig.players.get(playerToken).index;
+    Collections.rotate(playersList, -firstPlayerIndex);
 
     return
         new GameConfig(
-            new GameRef(gameRefId),
-            ofyGameConfig.players.values().stream().map(OfyPlayer::toDto).toArray(Player[]::new));
+            new GameRef(gameRefId, playerToken),
+            playersList.stream().map(OfyPlayer::toDto).toArray(Player[]::new));
   }
 }
