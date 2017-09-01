@@ -1,32 +1,44 @@
 package net.rk.splendid;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Optional;
+import java.io.Serializable;
 
 @Component
-@Scope(WebApplicationContext.SCOPE_SESSION)
-public final class CommonSessionParameters {
-  private Optional<String> gameRef;
-  private Optional<String> playerToken;
+@Scope(
+    scopeName = WebApplicationContext.SCOPE_SESSION,
+    proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class CommonSessionParameters implements Serializable {
+  private String gameRef;
+  private String playerToken;
 
   public CommonSessionParameters() {}
 
   void setGameRef(String gameRef) {
-    this.gameRef = Optional.ofNullable(gameRef);
+    System.err.println("[@" + this.hashCode() + "] Storing gameRef = " + gameRef);
+    this.gameRef = gameRef;
   }
 
   void setPlayerToken(String playerToken) {
-    this.playerToken = Optional.ofNullable(playerToken);
+    this.playerToken = playerToken;
   }
 
   public String getGameRef() {
-    return gameRef.get();
+    if (gameRef != null) {
+      return gameRef;
+    } else {
+      throw new NullPointerException("[@" + this.hashCode() + "] Null gameRef.");
+    }
   }
 
   public String getPlayerToken() {
-    return gameRef.get();
+    if (playerToken != null) {
+      return playerToken ;
+    } else {
+      throw new NullPointerException("[@" + this.hashCode() + "] Null playerToken.");
+    }
   }
 }
