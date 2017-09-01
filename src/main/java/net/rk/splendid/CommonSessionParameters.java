@@ -4,35 +4,29 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Optional;
+
 @Component
 @Scope(WebApplicationContext.SCOPE_SESSION)
 public final class CommonSessionParameters {
-  private String gameRef;
-  private String playerToken;
+  private Optional<String> gameRef;
+  private Optional<String> playerToken;
 
   public CommonSessionParameters() {}
 
   void setGameRef(String gameRef) {
-    this.gameRef = gameRef;
+    this.gameRef = Optional.ofNullable(gameRef);
   }
 
   void setPlayerToken(String playerToken) {
-    this.playerToken = playerToken;
+    this.playerToken = Optional.ofNullable(playerToken);
   }
 
-  String getGameRef() {
-    if (gameRef != null) {
-      return gameRef;
-    } else {
-      throw new IllegalStateException("gameRef not set");
-    }
+  public String getGameRef() {
+    return gameRef.get();
   }
 
   public String getPlayerToken() {
-    if (playerToken != null) {
-      return playerToken;
-    } else {
-      throw new IllegalStateException("playerToken not set");
-    }
+    return gameRef.get();
   }
 }
