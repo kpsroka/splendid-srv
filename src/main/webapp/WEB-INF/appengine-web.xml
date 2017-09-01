@@ -3,4 +3,5 @@
     <version>alpha</version>
     <threadsafe>true</threadsafe>
     <runtime>java8</runtime>
+    <sessions-enabled>true</sessions-enabled>
 </appengine-web-app>
