@@ -90,7 +90,7 @@ public class OfyResourceMap {
   public boolean holds(OfyResourceMap other) {
     return Maps.filterKeys(
         other.resourceMap,
-        resource -> this.resourceMap.getOrDefault(resource, 0L) >= other.resourceMap.get(resource))
+        resource -> this.resourceMap.getOrDefault(resource, 0L) < other.resourceMap.get(resource))
         .isEmpty();
   }
 
