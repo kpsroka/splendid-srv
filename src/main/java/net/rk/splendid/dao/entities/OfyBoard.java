@@ -44,4 +44,12 @@ public class OfyBoard {
       OfyResourceFactory resourceFactory) {
     factoriesByRow.get(rowIndex).setFactory(itemIndex, resourceFactory);
   }
+
+  public OfyResourceMap getResources() {
+    return resources;
+  }
+
+  public void setResources(OfyResourceMap resources) {
+    this.resources = resources;
+  }
 }

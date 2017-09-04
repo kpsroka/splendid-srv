@@ -7,6 +7,7 @@ import com.googlecode.objectify.stringifier.Stringifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 class IntegerStringifier implements Stringifier<Integer> {
 
@@ -26,6 +27,11 @@ public class OfyResourceMap {
   private Map<Integer, Long> resourceMap = Maps.newHashMap();
 
   OfyResourceMap() {}
+
+  public OfyResourceMap(List<Integer> resourceList) {
+    this.resourceMap = resourceList.stream()
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+  }
 
   private OfyResourceMap(OfyResourceMap source) {
     this.resourceMap = new HashMap<>(source.resourceMap);
@@ -53,12 +59,20 @@ public class OfyResourceMap {
     return array;
   }
 
-  public OfyResourceMap increase(int resource, int value) {
+  OfyResourceMap increment(int resource) {
     OfyResourceMap increased = new OfyResourceMap(this);
     increased.resourceMap.put(
         resource,
-        increased.resourceMap.getOrDefault(resource, 0L) + value);
+        increased.resourceMap.getOrDefault(resource, 0L) + 1);
     return increased;
+  }
+
+  public OfyResourceMap join(OfyResourceMap addend) {
+    OfyResourceMap joined = new OfyResourceMap();
+    joined.resourceMap =
+        Stream.concat(this.resourceMap.entrySet().stream(), addend.resourceMap.entrySet().stream())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, Long::sum));
+    return joined;
   }
 
   public OfyResourceMap reduce(OfyResourceMap subtrahend) {
@@ -78,5 +92,9 @@ public class OfyResourceMap {
         other.resourceMap,
         resource -> this.resourceMap.getOrDefault(resource, 0L) >= other.resourceMap.get(resource))
         .isEmpty();
+  }
+
+  public Map<Integer, Long> asMap() {
+    return Collections.unmodifiableMap(resourceMap);
   }
 }

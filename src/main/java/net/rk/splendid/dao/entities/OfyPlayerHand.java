@@ -40,7 +40,7 @@ public class OfyPlayerHand {
   public OfyResourceMap getFactoryResources() {
     OfyResourceMap resourceMap = new OfyResourceMap();
     for (OfyResourceFactory factory : factories) {
-      resourceMap = resourceMap.increase(factory.getResource(), 1);
+      resourceMap = resourceMap.increment(factory.getResource());
     }
     return resourceMap;
   }
