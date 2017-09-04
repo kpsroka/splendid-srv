@@ -18,21 +18,4 @@ public final class PlayerHand {
   public int[] getResources() {
     return resources;
   }
-
-  PlayerHand createDeepCopy() {
-    return new PlayerHand(
-        Arrays.stream(factories)
-            .map(ResourceFactory::createDeepCopy)
-            .toArray(ResourceFactory[]::new),
-        resources.clone()
-        );
-  }
-
-  public void setResources(int[] resources) {
-    this.resources = resources;
-  }
-
-  public void setFactories(ResourceFactory[] factories) {
-    this.factories = factories;
-  }
 }

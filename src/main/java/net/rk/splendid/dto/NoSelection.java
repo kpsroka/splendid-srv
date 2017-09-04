@@ -1,13 +1,10 @@
 package net.rk.splendid.dto;
 
 public class NoSelection extends Selection {
-  public static final String NO_SELECTION_TYPE = "NO_SELECTION";
+  private static final String NO_SELECTION_TYPE = "NO_SELECTION";
 
   @Override
   public String getType() {
     return NO_SELECTION_TYPE;
   }
-
-  @Override
-  public Selection createDeepCopy() { return this; }
 }

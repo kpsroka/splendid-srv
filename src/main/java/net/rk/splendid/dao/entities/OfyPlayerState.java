@@ -7,18 +7,17 @@ public class OfyPlayerState {
 
   private OfyPlayerState() {}
 
-  static OfyPlayerState fromDto(PlayerState playerState) {
-    OfyPlayerState ofyPlayerState = new OfyPlayerState();
-    ofyPlayerState.playerHand = OfyPlayerHand.fromDto(playerState.getHand());
-
-    return ofyPlayerState;
-  }
-
   public static PlayerState toDto(OfyPlayerState ofyPlayerState) {
     return new PlayerState(OfyPlayerHand.toDto(ofyPlayerState.playerHand));
   }
 
   public OfyPlayerHand getHand() {
     return playerHand;
+  }
+
+  static OfyPlayerState create() {
+    OfyPlayerState playerState = new OfyPlayerState();
+    playerState.playerHand = OfyPlayerHand.create();
+    return playerState;
   }
 }

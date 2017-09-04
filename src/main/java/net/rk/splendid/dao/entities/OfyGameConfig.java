@@ -13,21 +13,6 @@ public class OfyGameConfig {
 
   private OfyGameConfig() {}
 
-  static OfyGameConfig fromDto(GameConfig gameCfg, String[] playerRefs) {
-    OfyGameConfig ofyGameConfig = new OfyGameConfig();
-    ofyGameConfig.players = IntStream
-        .range(0, gameCfg.getPlayers().length)
-        .boxed()
-        .collect(
-            Collectors.toMap(
-                index -> playerRefs[index],
-                index -> OfyPlayer.fromDto(gameCfg.getPlayers()[index], index)
-            )
-        );
-
-    return ofyGameConfig;
-  }
-
   public static GameConfig toDto(
       String gameRefId,
       String playerToken,
@@ -41,5 +26,16 @@ public class OfyGameConfig {
         new GameConfig(
             new GameRef(gameRefId, playerToken),
             playersList.stream().map(OfyPlayer::toDto).toArray(Player[]::new));
+  }
+
+  public static OfyGameConfig create(OfyPlayer[] players, String[] playerRefs) {
+    OfyGameConfig ofyGameConfig = new OfyGameConfig();
+    ofyGameConfig.players = IntStream
+        .range(0, players.length)
+        .boxed()
+        .collect(
+            Collectors.toMap(index -> playerRefs[index], index -> players[index]));
+
+    return ofyGameConfig;
   }
 }

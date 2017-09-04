@@ -10,8 +10,4 @@ public final class PlayerState {
   public PlayerHand getHand() {
     return hand;
   }
-
-  PlayerState createDeepCopy() {
-    return new PlayerState(hand.createDeepCopy());
-  }
 }

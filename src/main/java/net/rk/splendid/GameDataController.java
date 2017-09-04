@@ -37,7 +37,6 @@ public final class GameDataController {
 
   @RequestMapping("/act")
   public GameState executePlayerAction(
-      CommonSessionParameters commonSessionParameters,
       @RequestParam("action") String action,
       @RequestParam("payload") String payload) {
     OfyGameState oldState = gameDao.getGameStateImpl();

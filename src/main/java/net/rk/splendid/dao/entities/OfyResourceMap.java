@@ -7,6 +7,7 @@ import com.googlecode.objectify.stringifier.Stringifier;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 class IntegerStringifier implements Stringifier<Integer> {
@@ -23,6 +24,10 @@ class IntegerStringifier implements Stringifier<Integer> {
 }
 
 public class OfyResourceMap {
+  static List<Integer> COLORS =
+      IntStream.range(0, 5).boxed().collect(Collectors.toList());
+  private static Long INITIAL_BOARD_RESOURCE_COUNT = 5L;
+
   @Stringify(IntegerStringifier.class)
   private Map<Integer, Long> resourceMap = Maps.newHashMap();
 
@@ -96,5 +101,13 @@ public class OfyResourceMap {
 
   public Map<Integer, Long> asMap() {
     return Maps.newHashMap(Maps.filterValues(this.resourceMap, value -> value != 0));
+  }
+
+  static OfyResourceMap createInitialBoardMap() {
+    OfyResourceMap resourceMap = new OfyResourceMap();
+    for (Integer resource : COLORS) {
+      resourceMap.resourceMap.put(resource, INITIAL_BOARD_RESOURCE_COUNT);
+    }
+    return resourceMap;
   }
 }

@@ -7,13 +7,6 @@ public final class GameState {
   private final Board board;
   private final PlayerState[] playerState;
 
-  public GameState() {
-    this(
-        0,
-        FakeData.CreateRandomBoard(),
-        FakeData.CreateRandomPlayerState(FakeData.FIXED_PLAYERS.length));
-  }
-
   public GameState(int round, Board board, PlayerState[] playerState) {
     this.round = round;
     this.board = board;
@@ -30,13 +23,5 @@ public final class GameState {
 
   public PlayerState[] getPlayerState() {
     return playerState;
-  }
-
-  public GameState createDeepCopy() {
-    PlayerState[] newPlayerState = Arrays.stream(playerState)
-        .map(PlayerState::createDeepCopy)
-        .toArray(PlayerState[]::new);
-
-    return new GameState(this.round, this.board.createDeepCopy(), newPlayerState);
   }
 }

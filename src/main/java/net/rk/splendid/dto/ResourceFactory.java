@@ -24,8 +24,4 @@ public final class ResourceFactory {
   public int getPoints() {
     return points;
   }
-
-  ResourceFactory createDeepCopy() {
-    return new ResourceFactory(color, cost.clone(), points);
-  }
 }

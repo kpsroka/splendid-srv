@@ -5,27 +5,13 @@ import net.rk.splendid.dto.PlayerHand;
 import net.rk.splendid.dto.ResourceFactory;
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OfyPlayerHand {
   private List<OfyResourceFactory> factories = Lists.newArrayList();
   private OfyResourceMap resources = new OfyResourceMap();
 
   OfyPlayerHand() {}
-
-  static OfyPlayerHand fromDto(PlayerHand hand) {
-    OfyPlayerHand ofyPlayerHand = new OfyPlayerHand();
-    ofyPlayerHand.factories =
-        Arrays.stream(hand.getFactories())
-            .map(OfyResourceFactory::fromDto)
-            .collect(Collectors.toList());
-
-    ofyPlayerHand.resources = OfyResourceMap.fromResourceArray(hand.getResources());
-
-    return ofyPlayerHand;
-  }
 
   public static PlayerHand toDto(OfyPlayerHand ofyPlayerHand) {
     return new PlayerHand(
@@ -52,5 +38,9 @@ public class OfyPlayerHand {
   public void addFactory(OfyResourceFactory factory) {
     Assert.notNull(factory, "Attempting to add a null factory.");
     factories.add(factory);
+  }
+
+  public static OfyPlayerHand create() {
+    return new OfyPlayerHand();
   }
 }

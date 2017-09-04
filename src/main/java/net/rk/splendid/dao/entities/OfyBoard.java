@@ -2,27 +2,17 @@ package net.rk.splendid.dao.entities;
 
 import net.rk.splendid.dto.Board;
 import net.rk.splendid.dto.ResourceFactory;
-import org.springframework.util.Assert;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class OfyBoard {
-  private List<OfyResourceFactoryRow> factoriesByRow;
+  private static final int FACTORY_ROWS = 3;
+
+  private List<OfyResourceFactoryRow> factoriesByRow = new ArrayList<>();
   private OfyResourceMap resources;
   private OfySelection selection;
-
-  static OfyBoard fromDto(Board board) {
-    OfyBoard ofyBoard = new OfyBoard();
-    ofyBoard.factoriesByRow = Arrays.stream(board.getFactoriesByRow())
-        .map(OfyResourceFactoryRow::fromDto)
-        .collect(Collectors.toList());
-    ofyBoard.resources = OfyResourceMap.fromResourceArray(board.getResources());
-    ofyBoard.selection = OfySelection.fromDto(board.getSelection());
-
-    return ofyBoard;
-  }
 
   public static Board toDto(OfyBoard ofyBoard) {
     return new Board(
@@ -51,5 +41,14 @@ public class OfyBoard {
 
   public void setResources(OfyResourceMap resources) {
     this.resources = resources;
+  }
+
+  static OfyBoard create() {
+    OfyBoard board = new OfyBoard();
+    IntStream.range(0, FACTORY_ROWS).forEach(
+        rowIndex -> board.factoriesByRow.add(OfyResourceFactoryRow.create(rowIndex)));
+    board.selection = new OfyNoSelection();
+    board.resources = OfyResourceMap.createInitialBoardMap();
+    return board;
   }
 }

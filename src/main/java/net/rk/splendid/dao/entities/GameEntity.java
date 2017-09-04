@@ -2,8 +2,8 @@ package net.rk.splendid.dao.entities;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import net.rk.splendid.dto.GameConfig;
-import net.rk.splendid.dto.GameState;
+
+import java.util.UUID;
 
 @Entity
 public class GameEntity {
@@ -13,10 +13,10 @@ public class GameEntity {
 
   private GameEntity() {}
 
-  public GameEntity(GameConfig gameConfig, GameState gameState, String[] playerTokens) {
-    this.gameRefId = gameConfig.getRef().getGameId();
-    this.gameConfig = OfyGameConfig.fromDto(gameConfig, playerTokens);
-    this.gameState = OfyGameState.fromDto(gameState);
+  public GameEntity(OfyGameConfig gameConfig, OfyGameState gameState) {
+    this.gameRefId = UUID.randomUUID().toString();
+    this.gameConfig = gameConfig;
+    this.gameState = gameState;
   }
 
   public String getId() {

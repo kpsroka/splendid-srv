@@ -24,23 +24,4 @@ public final class Board {
   public Selection getSelection() {
     return selection;
   }
-
-  Board createDeepCopy() {
-    return new Board(
-        Arrays.stream(factoriesByRow).map(
-            factoryRow -> Arrays.stream(factoryRow)
-                .map(ResourceFactory::createDeepCopy)
-                .toArray(ResourceFactory[]::new))
-            .toArray(ResourceFactory[][]::new),
-        resources.clone(),
-        selection.createDeepCopy());
-  }
-
-  public void setResources(int[] resources) {
-    this.resources = resources;
-  }
-
-  public void setFactories(ResourceFactory[][] factories) {
-    this.factoriesByRow = factories;
-  }
 }

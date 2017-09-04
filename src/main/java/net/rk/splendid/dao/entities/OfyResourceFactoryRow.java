@@ -3,21 +3,15 @@ package net.rk.splendid.dao.entities;
 import net.rk.splendid.dto.ResourceFactory;
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 class OfyResourceFactoryRow {
-  private List<OfyResourceFactory> resourceFactoryList;
+  private static final int FACTORIES_PER_ROW = 5;
+  private List<OfyResourceFactory> resourceFactoryList = new ArrayList<>();
 
   private OfyResourceFactoryRow() {}
-
-  static OfyResourceFactoryRow fromDto(ResourceFactory[] factoryRow) {
-    OfyResourceFactoryRow ofyFactoryRow = new OfyResourceFactoryRow();
-    ofyFactoryRow.resourceFactoryList =
-        Arrays.stream(factoryRow).map(OfyResourceFactory::fromDto).collect(Collectors.toList());
-    return ofyFactoryRow;
-  }
 
   static ResourceFactory[] toDto(OfyResourceFactoryRow ofyFactoryRow) {
     return ofyFactoryRow.resourceFactoryList.stream()
@@ -32,5 +26,24 @@ class OfyResourceFactoryRow {
   public void setFactory(int index, OfyResourceFactory resourceFactory) {
     Assert.notNull(resourceFactory, "Attempting to set null factory.");
     resourceFactoryList.set(index, resourceFactory);
+  }
+
+  public static OfyResourceFactoryRow create(int rowIndex) {
+    OfyResourceFactoryRow factoryRow = new OfyResourceFactoryRow();
+    int minCost = GetMinCostForRow(rowIndex);
+    int maxCost = GetMaxCostForRow(rowIndex);
+    IntStream.range(0, FACTORIES_PER_ROW)
+        .forEach(index ->
+            factoryRow.resourceFactoryList.add(
+                OfyResourceFactory.createFactory(minCost, maxCost)));
+    return factoryRow;
+  }
+
+  private static int GetMinCostForRow(int row) {
+    return 1 + (row * 2);
+  }
+
+  private static int GetMaxCostForRow(int row) {
+    return 4 + (row * 3);
   }
 }

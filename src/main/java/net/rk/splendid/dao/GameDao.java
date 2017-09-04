@@ -5,9 +5,9 @@ import net.rk.splendid.CommonSessionParameters;
 import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dao.entities.OfyGameConfig;
 import net.rk.splendid.dao.entities.OfyGameState;
+import net.rk.splendid.dao.entities.OfyPlayer;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
-import net.rk.splendid.dto.GameState;
 import net.rk.splendid.dto.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,12 @@ public final class GameDao {
 
   @Autowired private CommonSessionParameters sessionParamsProvider;
 
-  private static final Player[] FIXED_PLAYERS = new Player[] {
-      new Player("Adam"),
-      new Player("Barbara"),
-      new Player("Claude"),
-      new Player("Dominique")
+  private static final String[] FIXED_PLAYERS = new String[] {
+      "Adam",
+      "Barbara",
+      "Claude",
+      "Dominique",
+      "Emmanuel"
   };
 
   public GameRef createGameImpl(int numberOfPlayers) {
@@ -34,17 +35,15 @@ public final class GameDao {
   }
 
   private static GameRef createGame(int numberOfPlayers) {
-    Player[] players = new Player[numberOfPlayers];
-    Arrays.setAll(players, i -> FIXED_PLAYERS[i]);
+    OfyPlayer[] players = new OfyPlayer[numberOfPlayers];
+    Arrays.setAll(players, i -> OfyPlayer.create(i, FIXED_PLAYERS[i]));
     String[] playerRefs = new String[numberOfPlayers];
     Arrays.setAll(playerRefs, i -> UUID.randomUUID().toString());
 
-    String gameRefId = UUID.randomUUID().toString();
     GameEntity entity =
         new GameEntity(
-            new GameConfig(new GameRef(gameRefId), players),
-            new GameState(),
-            playerRefs);
+            OfyGameConfig.create(players, playerRefs),
+            OfyGameState.create(playerRefs));
 
     ofy().save().entity(entity).now();
 

@@ -6,6 +6,7 @@ import net.rk.splendid.dto.PlayerState;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class OfyGameState {
@@ -14,20 +15,6 @@ public class OfyGameState {
   private Map<String, OfyPlayerState> playerState = new HashMap<>();
 
   private OfyGameState() {}
-
-  public static OfyGameState fromDto(GameState gameState) {
-    OfyGameState ofyGameState = new OfyGameState();
-    ofyGameState.round = gameState.getRound();
-    ofyGameState.board = OfyBoard.fromDto(gameState.getBoard());
-    ofyGameState.playerState =
-        Arrays.stream(gameState.getPlayerState())
-            .collect(Collectors.toMap(
-                player -> "unset",
-                OfyPlayerState::fromDto
-            ));
-
-    return ofyGameState;
-  }
 
   public static GameState toDto(OfyGameState ofyGameState) {
     return new GameState(
@@ -49,5 +36,15 @@ public class OfyGameState {
     } else {
       throw new IllegalArgumentException("No player with token " + playerToken);
     }
+  }
+
+  public static OfyGameState create(String[] playerRefs) {
+    OfyGameState gameState = new OfyGameState();
+    gameState.round = 0;
+    gameState.board = OfyBoard.create();
+    gameState.playerState =
+        Arrays.stream(playerRefs)
+            .collect(Collectors.toMap(Function.identity(), ref -> OfyPlayerState.create()));
+    return gameState;
   }
 }

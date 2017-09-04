@@ -4,7 +4,6 @@ import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayerHand;
 import net.rk.splendid.dao.entities.OfyResourceFactory;
 import net.rk.splendid.dao.entities.OfyResourceMap;
-import net.rk.splendid.dto.FakeData;
 
 import java.util.Arrays;
 
@@ -42,7 +41,8 @@ class TakeFactoryAction implements GameAction {
     gameState.getBoard().setFactory(
         factoryCoords[0],
         factoryCoords[1],
-        OfyResourceFactory.fromDto(FakeData.CreateRandomResourceFactory(factoryCoords[0])));
+        // TODO: extract min/max cost parameters into a shared factory.
+        OfyResourceFactory.createFactory(factoryCoords[0] + 1, factoryCoords[0] + 4));
 
     return gameState;
   }
