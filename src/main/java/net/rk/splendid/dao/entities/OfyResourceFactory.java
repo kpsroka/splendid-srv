@@ -9,6 +9,12 @@ public class OfyResourceFactory {
 
   private OfyResourceFactory() {}
 
+  OfyResourceFactory(int color, int points, OfyResourceMap cost) {
+    this.color = color;
+    this.points = points;
+    this.cost = cost;
+  }
+
   public static OfyResourceFactory fromDto(ResourceFactory resourceFactory) {
     OfyResourceFactory ofyResourceFactory = new OfyResourceFactory();
     ofyResourceFactory.color = resourceFactory.getColor();

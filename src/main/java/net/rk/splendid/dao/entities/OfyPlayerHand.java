@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 public class OfyPlayerHand {
   private List<OfyResourceFactory> factories = Lists.newArrayList();
-  private OfyResourceMap resources;
+  private OfyResourceMap resources = new OfyResourceMap();
 
-  private OfyPlayerHand() {}
+  OfyPlayerHand() {}
 
   static OfyPlayerHand fromDto(PlayerHand hand) {
     OfyPlayerHand ofyPlayerHand = new OfyPlayerHand();
