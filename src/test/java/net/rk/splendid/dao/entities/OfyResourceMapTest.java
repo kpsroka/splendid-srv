@@ -1,6 +1,7 @@
 package net.rk.splendid.dao.entities;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -82,6 +83,26 @@ public class OfyResourceMapTest {
     Assert.assertEquals(expectedMap, resourceMap.asMap());
 
     resourceMap = resourceMap.reduce(new OfyResourceMap(Lists.newArrayList(1)));
+    Assert.assertEquals(expectedMap, resourceMap.asMap());
+  }
+
+  @Test
+  public void joinTest() {
+    OfyResourceMap resourceMap = new OfyResourceMap().join(new OfyResourceMap());
+    Assert.assertTrue(resourceMap.asMap().isEmpty());
+
+    OfyResourceMap joinedMap = new OfyResourceMap(Lists.newArrayList(2, 4, 6));
+    resourceMap = resourceMap.join(joinedMap);
+
+    Assert.assertEquals(joinedMap.asMap(), resourceMap.asMap());
+    resourceMap = resourceMap.join(new OfyResourceMap(Lists.newArrayList(4, 6, 6, 8)));
+
+    HashMap<Integer, Long> expectedMap = Maps.newHashMap();
+    expectedMap.put(2, 1L);
+    expectedMap.put(4, 2L);
+    expectedMap.put(6, 3L);
+    expectedMap.put(8, 1L);
+
     Assert.assertEquals(expectedMap, resourceMap.asMap());
   }
 }
