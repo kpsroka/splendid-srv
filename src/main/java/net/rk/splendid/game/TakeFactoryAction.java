@@ -36,7 +36,7 @@ class TakeFactoryAction implements GameAction {
     if (!remainingCost.isZero()) {
       OfyResourceMap resourcesOnHand = hand.getResources();
       if (resourcesOnHand.holds(remainingCost)) {
-        hand.setResources(remainingCost.reduce(remainingCost));
+        hand.setResources(resourcesOnHand.reduce(remainingCost));
       } else {
         throw new IllegalStateException("Not enough resources to obtain factory.");
       }
