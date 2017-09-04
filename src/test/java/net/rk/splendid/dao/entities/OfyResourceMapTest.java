@@ -67,7 +67,7 @@ public class OfyResourceMapTest {
         resourceMap.holds(new OfyResourceMap(Lists.newArrayList(2, 3, 4, 5))));
   }
 
-  @Test @Ignore
+  @Test
   public void reduceTest() {
     OfyResourceMap resourceMap = new OfyResourceMap(Lists.newArrayList(1, 3, 5, 5));
     Map<Integer, Long> expectedMap = resourceMap.asMap();
@@ -79,6 +79,9 @@ public class OfyResourceMapTest {
     expectedMap = new HashMap<>();
     expectedMap.put(3, 1L);
     expectedMap.put(5, 1L);
+    Assert.assertEquals(expectedMap, resourceMap.asMap());
+
+    resourceMap = resourceMap.reduce(new OfyResourceMap(Lists.newArrayList(1)));
     Assert.assertEquals(expectedMap, resourceMap.asMap());
   }
 }

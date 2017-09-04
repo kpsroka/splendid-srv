@@ -95,6 +95,6 @@ public class OfyResourceMap {
   }
 
   public Map<Integer, Long> asMap() {
-    return Collections.unmodifiableMap(resourceMap);
+    return Maps.newHashMap(Maps.filterValues(this.resourceMap, value -> value != 0));
   }
 }
