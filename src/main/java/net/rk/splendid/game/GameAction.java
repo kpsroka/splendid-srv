@@ -1,8 +1,8 @@
 package net.rk.splendid.game;
 
-import net.rk.splendid.dto.GameState;
+import net.rk.splendid.dao.entities.OfyGameState;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
-public interface GameAction extends Function<GameState, GameState> {
+public interface GameAction extends BiFunction<String, OfyGameState, OfyGameState> {
 }

@@ -63,26 +63,26 @@ public final class GameDao {
     return OfyGameConfig.toDto(gameRefId, playerToken, gameEntity.getGameConfig());
   }
 
-  public GameState getGameStateImpl() {
+  public OfyGameState getGameStateImpl() {
     return GameDao.getGameState(sessionParamsProvider.getGameRef());
   }
 
-  private static GameState getGameState(String gameRefId) {
+  private static OfyGameState getGameState(String gameRefId) {
     Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-    return OfyGameState.toDto(gameEntity.getGameState());
+    return gameEntity.getGameState();
   }
 
-  public void updateGameStateImpl(GameState newState) {
+  public void updateGameStateImpl(OfyGameState newState) {
     GameDao.updateGameState(
         this.sessionParamsProvider.getGameRef(),
         newState);
   }
 
-  private static void updateGameState(String gameRefId, GameState newState) {
+  private static void updateGameState(String gameRefId, OfyGameState newState) {
     Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-    gameEntity.setGameState(OfyGameState.fromDto(newState));
+    gameEntity.setGameState(newState);
     ofy().save().entity(gameEntity);
   }
 }

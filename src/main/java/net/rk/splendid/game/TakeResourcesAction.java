@@ -4,8 +4,6 @@ import com.google.common.collect.Iterables;
 import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayerHand;
 import net.rk.splendid.dao.entities.OfyResourceMap;
-import net.rk.splendid.dto.GameRef;
-import net.rk.splendid.dto.GameState;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +20,8 @@ final class TakeResourcesAction implements GameAction {
         .collect(Collectors.toList());
   }
 
-  public OfyGameState apply(GameRef gameRef, OfyGameState gameState) {
+  @Override
+  public OfyGameState apply(String playerToken, OfyGameState gameState) {
     OfyResourceMap boardResources = gameState.getBoard().getResources();
     OfyResourceMap takenResources = new OfyResourceMap(takenResourcesList);
 
@@ -36,7 +35,7 @@ final class TakeResourcesAction implements GameAction {
     }
 
     gameState.getBoard().setResources(boardResources.reduce(takenResources));
-    OfyPlayerHand playerHand = gameState.getPlayerState(gameRef.getPlayerToken()).getHand();
+    OfyPlayerHand playerHand = gameState.getPlayerState(playerToken).getHand();
     playerHand.setResources(playerHand.getResources().join(takenResources));
 
     return gameState;
@@ -45,34 +44,5 @@ final class TakeResourcesAction implements GameAction {
   private boolean meetsActionCriteria(Map<Integer, Long> takenResourceMap) {
     return (takenResourceMap.size() == 1 && Iterables.getOnlyElement(takenResourceMap.values()).equals(2L))
         || (takenResourceMap.size() == 3 && takenResourceMap.values().stream().allMatch(value -> value.equals(1L)));
-  }
-
-  @Override
-  public GameState apply(GameState gameState) {
-    List<Integer> boardResources = Arrays.stream(gameState.getBoard().getResources())
-        .boxed()
-        .collect(Collectors.toList());
-
-    // TODO: check whether takenResourcesList is legal wrt game rules.
-
-    for (Integer resource : takenResourcesList) {
-      if (!boardResources.remove(resource)) {
-        throw new IllegalStateException("Can't remove resource " + resource);
-      }
-    }
-
-    GameState newState = gameState.createDeepCopy();
-    newState.getBoard()
-        .setResources(boardResources.stream().mapToInt(Integer::intValue).toArray());
-
-    int[] oldPlayerHand = gameState.getPlayerState()[0].getHand().getResources();
-    int[] newPlayerHand = Arrays.copyOf(oldPlayerHand, oldPlayerHand.length + takenResourcesList.size());
-    for (int i = 0; i < takenResourcesList.size(); i++) {
-      newPlayerHand[oldPlayerHand.length + i] = takenResourcesList.get(i);
-    }
-
-    newState.getPlayerState()[0].getHand().setResources(newPlayerHand);
-
-    return newState;
   }
 }

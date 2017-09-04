@@ -18,6 +18,6 @@ public final class GameActions {
   }
 
   private static GameAction NoOp() {
-    return (state -> state);
+    return (token, state) -> state;
   }
 }
