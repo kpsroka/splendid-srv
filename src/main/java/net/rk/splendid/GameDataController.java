@@ -1,6 +1,7 @@
 package net.rk.splendid;
 
 import net.rk.splendid.dao.GameDao;
+import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameState;
@@ -32,18 +33,26 @@ public final class GameDataController {
 
   @RequestMapping("/getState")
   public GameState getGameState() {
-    return OfyGameState.toDto(gameDao.getGameStateImpl());
+    GameEntity gameEntity = gameDao.getGameEntity();
+    return OfyGameState.toDto(
+        gameDao.getGameStateImpl(),
+        gameEntity.getGameConfig(),
+        commonSessionParameters.getPlayerToken());
   }
 
   @RequestMapping("/act")
   public GameState executePlayerAction(
       @RequestParam("action") String action,
       @RequestParam("payload") String payload) {
-    OfyGameState oldState = gameDao.getGameStateImpl();
+    GameEntity gameEntity = gameDao.getGameEntity();
+    OfyGameState oldState = gameEntity.getGameState();
     OfyGameState newState = GameActions.GetAction(action, payload)
         .apply(commonSessionParameters.getPlayerToken(), oldState);
     gameDao.updateGameStateImpl(newState);
-    return OfyGameState.toDto(newState);
+    return OfyGameState.toDto(
+        newState,
+        gameEntity.getGameConfig(),
+        commonSessionParameters.getPlayerToken());
   }
 
   @RequestMapping("/join")

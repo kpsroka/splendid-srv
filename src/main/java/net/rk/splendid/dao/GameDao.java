@@ -8,7 +8,6 @@ import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayer;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
-import net.rk.splendid.dto.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +28,8 @@ public final class GameDao {
       "Dominique",
       "Emmanuel"
   };
+
+  private GameEntity gameEntity;
 
   public GameRef createGameImpl(int numberOfPlayers) {
     return GameDao.createGame(numberOfPlayers);
@@ -83,5 +84,11 @@ public final class GameDao {
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
     gameEntity.setGameState(newState);
     ofy().save().entity(gameEntity);
+  }
+
+  public GameEntity getGameEntity() {
+    Key<GameEntity> gameRefKey =
+        Key.create(GameEntity.class, sessionParamsProvider.getGameRef());
+    return ofy().load().key(gameRefKey).now();
   }
 }

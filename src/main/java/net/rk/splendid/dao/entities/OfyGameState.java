@@ -3,9 +3,7 @@ package net.rk.splendid.dao.entities;
 import net.rk.splendid.dto.GameState;
 import net.rk.splendid.dto.PlayerState;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -16,14 +14,16 @@ public class OfyGameState {
 
   private OfyGameState() {}
 
-  public static GameState toDto(OfyGameState ofyGameState) {
+  public static GameState toDto(OfyGameState ofyGameState, OfyGameConfig gameConfig, String playerToken) {
+    List<String> playerTokensOrdered = gameConfig.getPlayerTokensOrdered(playerToken);
+
     return new GameState(
         ofyGameState.round,
         OfyBoard.toDto(ofyGameState.board),
-        ofyGameState.playerState.values().stream()
+        playerTokensOrdered.stream()
+            .map(ofyGameState.playerState::get)
             .map(OfyPlayerState::toDto)
-            .toArray(PlayerState[]::new)
-    );
+            .toArray(PlayerState[]::new));
   }
 
   public OfyBoard getBoard() {
