@@ -56,9 +56,7 @@ public final class GameDataController {
   }
 
   @RequestMapping("/join")
-  public GameConfig joinGame(
-      CommonSessionParameters sessionParams,
-      @RequestParam("playerName") String playerName) {
+  public GameConfig joinGame(@RequestParam("playerName") String playerName) {
     return gameDao.getGameConfigImpl();
   }
 }
