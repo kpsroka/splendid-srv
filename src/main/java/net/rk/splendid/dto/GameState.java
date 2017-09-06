@@ -1,16 +1,24 @@
 package net.rk.splendid.dto;
 
-import java.util.Arrays;
-
 public final class GameState {
+  private final String gameStatus;
   private final int round;
   private final Board board;
   private final PlayerState[] playerState;
 
-  public GameState(int round, Board board, PlayerState[] playerState) {
+  public GameState(
+      String gameStatus,
+      int round,
+      Board board,
+      PlayerState[] playerState) {
+    this.gameStatus = gameStatus;
     this.round = round;
     this.board = board;
     this.playerState = playerState;
+  }
+
+  public String getGameStatus() {
+    return gameStatus;
   }
 
   public int getRound() {

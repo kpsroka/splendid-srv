@@ -8,6 +8,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class OfyGameState {
+  private OfyGameStatus gameStatus;
   private int round;
   private OfyBoard board;
   private Map<String, OfyPlayerState> playerState = new HashMap<>();
@@ -18,6 +19,7 @@ public class OfyGameState {
     List<String> playerTokensOrdered = gameConfig.getPlayerTokensOrdered(playerToken);
 
     return new GameState(
+        ofyGameState.gameStatus.name(),
         ofyGameState.round,
         OfyBoard.toDto(ofyGameState.board),
         playerTokensOrdered.stream()
@@ -40,6 +42,7 @@ public class OfyGameState {
 
   public static OfyGameState create(String[] playerRefs) {
     OfyGameState gameState = new OfyGameState();
+    gameState.gameStatus = OfyGameStatus.UNKNOWN;
     gameState.round = 0;
     gameState.board = OfyBoard.create();
     gameState.playerState =
