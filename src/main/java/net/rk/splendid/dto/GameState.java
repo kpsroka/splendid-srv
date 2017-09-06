@@ -32,4 +32,8 @@ public final class GameState {
   public PlayerState[] getPlayerState() {
     return playerState;
   }
+
+  public int getCurrentPlayerIndex() {
+    return round;
+  }
 }

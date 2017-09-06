@@ -20,7 +20,7 @@ public class OfyGameState {
 
     return new GameState(
         ofyGameState.gameStatus.name(),
-        ofyGameState.round,
+        (ofyGameState.round - gameConfig.getPlayer(playerToken).getIndex()) % playerTokensOrdered.size(),
         OfyBoard.toDto(ofyGameState.board),
         playerTokensOrdered.stream()
             .map(ofyGameState.playerState::get)

@@ -62,4 +62,8 @@ public class OfyGameConfig {
   public void setPlayerName(String playerToken, String playerName) {
     this.players.get(playerToken).setName(playerName);
   }
+
+  OfyPlayer getPlayer(String playerToken) {
+    return this.players.get(playerToken);
+  }
 }
