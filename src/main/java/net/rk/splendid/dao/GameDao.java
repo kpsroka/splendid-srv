@@ -9,6 +9,7 @@ import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayer;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
+import net.rk.splendid.exceptions.GameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,11 +25,7 @@ public final class GameDao {
 
   @Autowired private CommonSessionParameters sessionParamsProvider;
 
-  public GameRef createGameImpl(int numberOfPlayers, String playerName) {
-    return GameDao.createGame(numberOfPlayers, playerName);
-  }
-
-  private static GameRef createGame(int numberOfPlayers, String playerName) {
+  public GameRef createGame(int numberOfPlayers, String playerName) {
     OfyPlayer[] players = new OfyPlayer[numberOfPlayers];
     Arrays.setAll(players, i -> OfyPlayer.create(i, i == 0 ? playerName : "Waiting…"));
     String[] playerRefs = new String[numberOfPlayers];
@@ -46,36 +43,21 @@ public final class GameDao {
     return new GameRef(entity.getId(), playerRefs[0]);
   }
 
-  public GameConfig getGameConfigImpl() {
-    return GameDao.getGameConfig(
-        sessionParamsProvider.getGameRef(),
-        sessionParamsProvider.getPlayerToken());
-  }
-
-  private static GameConfig getGameConfig(String gameRefId, String playerToken) {
+  public GameConfig getGameConfig() {
+    String gameRefId = sessionParamsProvider.getGameRef();
     Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-    return OfyGameConfig.toDto(gameRefId, playerToken, gameEntity.getGameConfig());
+    return OfyGameConfig.toDto(gameRefId, sessionParamsProvider.getPlayerToken(), gameEntity.getGameConfig());
   }
 
-  public OfyGameState getGameStateImpl() {
-    return GameDao.getGameState(sessionParamsProvider.getGameRef());
-  }
-
-  private static OfyGameState getGameState(String gameRefId) {
-    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
+  public OfyGameState getGameState() {
+    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, sessionParamsProvider.getGameRef());
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
     return gameEntity.getGameState();
   }
 
-  public void updateGameStateImpl(OfyGameState newState) {
-    GameDao.updateGameState(
-        this.sessionParamsProvider.getGameRef(),
-        newState);
-  }
-
-  private static void updateGameState(String gameRefId, OfyGameState newState) {
-    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
+  public void updateGameState(OfyGameState newState) {
+    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, this.sessionParamsProvider.getGameRef());
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
     gameEntity.setGameState(newState);
     ofy().save().entity(gameEntity);
@@ -84,7 +66,12 @@ public final class GameDao {
   public GameEntity getGameEntity() {
     Key<GameEntity> gameRefKey =
         Key.create(GameEntity.class, sessionParamsProvider.getGameRef());
-    return ofy().load().key(gameRefKey).now();
+    GameEntity entity = ofy().load().key(gameRefKey).now();
+    if (entity != null) {
+      return entity;
+    } else {
+      throw new GameNotFoundException();
+    }
   }
 
   public String joinPlayer(String playerName) {

@@ -29,14 +29,14 @@ public final class GameDataController {
 
   @RequestMapping("/getConfig")
   public GameConfig getGameConfig() {
-    return gameDao.getGameConfigImpl();
+    return gameDao.getGameConfig();
   }
 
   @RequestMapping("/getState")
   public GameState getGameState() {
     GameEntity gameEntity = gameDao.getGameEntity();
     return OfyGameState.toDto(
-        gameDao.getGameStateImpl(),
+        gameDao.getGameState(),
         gameEntity.getGameConfig(),
         commonSessionParameters.getPlayerToken());
   }
@@ -49,7 +49,7 @@ public final class GameDataController {
     OfyGameState oldState = gameEntity.getGameState();
     OfyGameState newState = GameActions.GetAction(action, payload)
         .apply(commonSessionParameters.getPlayerToken(), oldState);
-    gameDao.updateGameStateImpl(newState);
+    gameDao.updateGameState(newState);
     return OfyGameState.toDto(
         newState,
         gameEntity.getGameConfig(),
@@ -63,6 +63,6 @@ public final class GameDataController {
     }
 
     commonSessionParameters.setPlayerToken(gameDao.joinPlayer(playerName));
-    return gameDao.getGameConfigImpl();
+    return gameDao.getGameConfig();
   }
 }
