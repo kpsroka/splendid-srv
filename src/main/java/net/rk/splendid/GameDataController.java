@@ -5,6 +5,7 @@ import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameState;
+import net.rk.splendid.exceptions.PlayerNameEmptyException;
 import net.rk.splendid.game.GameActions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -57,6 +58,10 @@ public final class GameDataController {
 
   @RequestMapping("/join")
   public GameConfig joinGame(@RequestParam("playerName") String playerName) {
+    if (playerName.isEmpty()) {
+      throw new PlayerNameEmptyException();
+    }
+
     commonSessionParameters.setPlayerToken(gameDao.joinPlayer(playerName));
     return gameDao.getGameConfigImpl();
   }
