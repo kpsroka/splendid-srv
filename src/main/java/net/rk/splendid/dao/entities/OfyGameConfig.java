@@ -47,4 +47,19 @@ public class OfyGameConfig {
     Collections.rotate(orderedTokens, -orderedTokens.indexOf(firstPlayerToken));
     return orderedTokens;
   }
+
+  public Map<String, OfyPlayer> getPlayersOrdered() {
+    SortedMap<String, OfyPlayer> orderedPlayers =
+        new TreeMap<>(Comparator.comparingInt(token -> players.get(token).getIndex()));
+    orderedPlayers.putAll(players);
+    return players;
+  }
+
+  public void setPlayerJoined(String playerToken) {
+    this.players.get(playerToken).setJoined();
+  }
+
+  public void setPlayerName(String playerToken, String playerName) {
+    this.players.get(playerToken).setName(playerName);
+  }
 }
