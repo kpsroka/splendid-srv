@@ -27,7 +27,7 @@ public class OfyPlayer {
   }
 
   public boolean hasJoined() {
-    return false;
+    return this.joined;
   }
 
   void setJoined() {
