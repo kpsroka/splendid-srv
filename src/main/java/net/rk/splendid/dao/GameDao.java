@@ -24,23 +24,13 @@ public final class GameDao {
 
   @Autowired private CommonSessionParameters sessionParamsProvider;
 
-  private static final String[] FIXED_PLAYERS = new String[] {
-      "Adam",
-      "Barbara",
-      "Claude",
-      "Dominique",
-      "Emmanuel"
-  };
-
-  private GameEntity gameEntity;
-
-  public GameRef createGameImpl(int numberOfPlayers) {
-    return GameDao.createGame(numberOfPlayers);
+  public GameRef createGameImpl(int numberOfPlayers, String playerName) {
+    return GameDao.createGame(numberOfPlayers, playerName);
   }
 
-  private static GameRef createGame(int numberOfPlayers) {
+  private static GameRef createGame(int numberOfPlayers, String playerName) {
     OfyPlayer[] players = new OfyPlayer[numberOfPlayers];
-    Arrays.setAll(players, i -> OfyPlayer.create(i, FIXED_PLAYERS[i]));
+    Arrays.setAll(players, i -> OfyPlayer.create(i, i == 0 ? playerName : "Waiting…"));
     String[] playerRefs = new String[numberOfPlayers];
     Arrays.setAll(playerRefs, i -> UUID.randomUUID().toString());
 
@@ -50,7 +40,6 @@ public final class GameDao {
             OfyGameState.create(playerRefs));
 
     entity.getGameConfig().setPlayerJoined(playerRefs[0]);
-    entity.getGameConfig().setPlayerName(playerRefs[0], FIXED_PLAYERS[0]);
 
     ofy().save().entity(entity).now();
 

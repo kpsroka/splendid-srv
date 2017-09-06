@@ -27,6 +27,6 @@ public final class NewGameController {
       throw new PlayerCountOutOfRangeException(playerCount);
     }
 
-    return gameDao.createGameImpl(playerCount);
+    return gameDao.createGameImpl(playerCount, playerName);
   }
 }
