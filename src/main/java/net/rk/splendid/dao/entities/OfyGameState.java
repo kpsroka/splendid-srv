@@ -40,6 +40,10 @@ public class OfyGameState {
     }
   }
 
+  public OfyGameStatus getGameStatus() {
+    return gameStatus;
+  }
+
   public void setGameStatus(OfyGameStatus gameStatus) {
     this.gameStatus = gameStatus;
   }

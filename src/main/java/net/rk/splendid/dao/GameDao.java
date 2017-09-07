@@ -6,7 +6,7 @@ import net.rk.splendid.CommonSessionParameters;
 import net.rk.splendid.dao.entities.*;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
-import net.rk.splendid.dto.GameState;
+import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.GameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,15 +29,14 @@ public final class GameDao {
     String[] playerRefs = new String[numberOfPlayers];
     Arrays.setAll(playerRefs, i -> UUID.randomUUID().toString());
 
-    GameEntity entity =
-        new GameEntity(
-            OfyGameConfig.create(players, playerRefs),
-            OfyGameState.create(playerRefs));
+    OfyGameConfig gameConfig = OfyGameConfig.create(players, playerRefs);
+    gameConfig.setPlayerJoined(playerRefs[0]);
 
-    entity.getGameConfig().setPlayerJoined(playerRefs[0]);
+    OfyGameState gameState = OfyGameState.create(playerRefs);
+    gameState.setGameStatus(OfyGameStatus.PREPARING);
 
+    GameEntity entity = new GameEntity(gameConfig, gameState);
     ofy().save().entity(entity).now();
-
     return new GameRef(entity.getId(), playerRefs[0]);
   }
 
@@ -99,5 +98,9 @@ public final class GameDao {
     ofy().save().entity(gameEntity);
 
     return joinedPlayer.getKey();
+  }
+
+  public GameStatus getGameStatus() {
+    return new GameStatus(getGameState().getGameStatus().name());
   }
 }
