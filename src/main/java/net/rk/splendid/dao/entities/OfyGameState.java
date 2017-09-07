@@ -40,6 +40,10 @@ public class OfyGameState {
     }
   }
 
+  public void setGameStatus(OfyGameStatus gameStatus) {
+    this.gameStatus = gameStatus;
+  }
+
   public static OfyGameState create(String[] playerRefs) {
     OfyGameState gameState = new OfyGameState();
     gameState.gameStatus = OfyGameStatus.UNKNOWN;

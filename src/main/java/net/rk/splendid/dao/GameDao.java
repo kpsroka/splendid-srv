@@ -3,12 +3,10 @@ package net.rk.splendid.dao;
 import com.google.common.collect.Iterables;
 import com.googlecode.objectify.Key;
 import net.rk.splendid.CommonSessionParameters;
-import net.rk.splendid.dao.entities.GameEntity;
-import net.rk.splendid.dao.entities.OfyGameConfig;
-import net.rk.splendid.dao.entities.OfyGameState;
-import net.rk.splendid.dao.entities.OfyPlayer;
+import net.rk.splendid.dao.entities.*;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
+import net.rk.splendid.dto.GameState;
 import net.rk.splendid.exceptions.GameNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -91,6 +89,12 @@ public final class GameDao {
 
     gameEntity.getGameConfig().setPlayerName(joinedPlayer.getKey(), playerName);
     gameEntity.getGameConfig().setPlayerJoined(joinedPlayer.getKey());
+
+    if (players.values().stream()
+        .map(OfyPlayer::hasJoined)
+        .reduce(true, Boolean::logicalAnd)) {
+      gameEntity.getGameState().setGameStatus(OfyGameStatus.UNDERWAY);
+    }
 
     ofy().save().entity(gameEntity);
 
