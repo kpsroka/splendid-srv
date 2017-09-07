@@ -50,6 +50,11 @@ public final class GameDao {
   public OfyGameState getGameState() {
     Key<GameEntity> gameRefKey = Key.create(GameEntity.class, sessionParamsProvider.getGameRef());
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
+
+    if (gameEntity == null) {
+      throw new GameNotFoundException();
+    }
+
     return gameEntity.getGameState();
   }
 
