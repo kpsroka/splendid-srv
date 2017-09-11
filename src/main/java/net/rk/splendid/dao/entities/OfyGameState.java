@@ -74,4 +74,8 @@ public class OfyGameState {
             .collect(Collectors.toMap(Function.identity(), ref -> OfyPlayerState.create()));
     return gameState;
   }
+
+  public int getRound() {
+    return round;
+  }
 }

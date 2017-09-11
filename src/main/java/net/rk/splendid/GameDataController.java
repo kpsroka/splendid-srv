@@ -34,10 +34,16 @@ public final class GameDataController {
   }
 
   @RequestMapping("/getState")
-  public GameState getGameState() {
+  public GameState getGameState(
+      @RequestParam(value = "lastRound", defaultValue = "-1") int lastRound) {
     GameEntity gameEntity = gameDao.getGameEntity();
+
+    if (lastRound >= 0 && gameEntity.getGameState().getRound() <= lastRound) {
+      return null;
+    }
+
     return OfyGameState.toDto(
-        gameDao.getGameState(),
+        gameEntity.getGameState(),
         gameEntity.getGameConfig(),
         commonSessionParameters.getPlayerToken());
   }
