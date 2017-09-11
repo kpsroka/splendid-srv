@@ -50,6 +50,7 @@ public final class GameDataController {
     OfyGameState oldState = gameEntity.getGameState();
     OfyGameState newState = GameActions.GetAction(action, payload)
         .apply(commonSessionParameters.getPlayerToken(), oldState);
+    newState.incrementRound();
     gameDao.updateGameState(newState);
     return OfyGameState.toDto(
         newState,
