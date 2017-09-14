@@ -110,4 +110,9 @@ public class OfyResourceMap {
     }
     return resourceMap;
   }
+
+  @Override
+  public String toString() {
+    return resourceMap.toString();
+  }
 }
