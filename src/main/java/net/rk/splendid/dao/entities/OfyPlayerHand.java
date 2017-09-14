@@ -25,9 +25,7 @@ public class OfyPlayerHand {
 
   public OfyResourceMap getFactoryResources() {
     OfyResourceMap resourceMap = new OfyResourceMap();
-    for (OfyResourceFactory factory : factories) {
-      resourceMap = resourceMap.increment(factory.getResource());
-    }
+    factories.forEach(f -> resourceMap.increment(f.getResource()));
     return resourceMap;
   }
 
@@ -40,7 +38,7 @@ public class OfyPlayerHand {
     factories.add(factory);
   }
 
-  public static OfyPlayerHand create() {
+  static OfyPlayerHand create() {
     return new OfyPlayerHand();
   }
 }
