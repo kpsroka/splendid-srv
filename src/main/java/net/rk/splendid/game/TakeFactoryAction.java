@@ -43,6 +43,8 @@ class TakeFactoryAction implements GameAction {
         factoryCoords[1],
         // TODO: extract min/max cost parameters into a shared factory.
         OfyResourceFactory.createFactory(factoryCoords[0] + 1, factoryCoords[0] + 4));
+    gameState.getBoard().setResources(
+        gameState.getBoard().getResources().join(remainingCost));
 
     return gameState;
   }
