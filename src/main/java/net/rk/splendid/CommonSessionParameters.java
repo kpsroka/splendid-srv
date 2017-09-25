@@ -18,7 +18,6 @@ public class CommonSessionParameters implements Serializable {
   public CommonSessionParameters() {}
 
   void setGameRef(String gameRef) {
-    System.err.println("[@" + this.hashCode() + "] Storing gameRef = " + gameRef);
     this.gameRef = gameRef;
   }
 
