@@ -24,7 +24,7 @@ class IntegerStringifier implements Stringifier<Integer> {
 }
 
 public class OfyResourceMap {
-  static List<Integer> COLORS =
+  public static List<Integer> COLORS =
       IntStream.range(0, 5).boxed().collect(Collectors.toList());
   private static Long INITIAL_BOARD_RESOURCE_COUNT = 5L;
 
@@ -40,15 +40,6 @@ public class OfyResourceMap {
 
   private OfyResourceMap(OfyResourceMap source) {
     this.resourceMap = new HashMap<>(source.resourceMap);
-  }
-
-  static OfyResourceMap fromResourceArray(int[] resources) {
-    OfyResourceMap ofyResourceMap = new OfyResourceMap();
-    ofyResourceMap.resourceMap = Arrays.stream(resources)
-        .boxed()
-        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
-    return ofyResourceMap;
   }
 
   static int[] toResourceArray(OfyResourceMap ofyResourceMap) {

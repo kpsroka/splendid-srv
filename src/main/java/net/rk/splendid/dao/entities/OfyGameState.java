@@ -2,6 +2,7 @@ package net.rk.splendid.dao.entities;
 
 import net.rk.splendid.dto.GameState;
 import net.rk.splendid.dto.PlayerState;
+import net.rk.splendid.game.FactoryGenerator;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -64,11 +65,13 @@ public class OfyGameState {
     round++;
   }
 
-  public static OfyGameState create(String[] playerRefs) {
+  public static OfyGameState create(
+      String[] playerRefs,
+      FactoryGenerator factoryGenerator) {
     OfyGameState gameState = new OfyGameState();
     gameState.gameStatus = OfyGameStatus.UNKNOWN;
     gameState.round = 0;
-    gameState.board = OfyBoard.create();
+    gameState.board = OfyBoard.create(factoryGenerator);
     gameState.playerState =
         Arrays.stream(playerRefs)
             .collect(Collectors.toMap(Function.identity(), ref -> OfyPlayerState.create()));

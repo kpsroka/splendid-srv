@@ -8,6 +8,7 @@ import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.GameNotFoundException;
+import net.rk.splendid.game.FactoryGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +23,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 public final class GameDao {
 
   @Autowired private CommonSessionParameters sessionParamsProvider;
+  @Autowired private FactoryGenerator factoryGenerator;
 
   public GameRef createGame(int numberOfPlayers, String playerName) {
     OfyPlayer[] players = new OfyPlayer[numberOfPlayers];
@@ -32,7 +34,7 @@ public final class GameDao {
     OfyGameConfig gameConfig = OfyGameConfig.create(players, playerRefs);
     gameConfig.setPlayerJoined(playerRefs[0]);
 
-    OfyGameState gameState = OfyGameState.create(playerRefs);
+    OfyGameState gameState = OfyGameState.create(playerRefs, factoryGenerator);
     gameState.setGameStatus(OfyGameStatus.PREPARING);
 
     GameEntity entity = new GameEntity(gameConfig, gameState);
@@ -47,7 +49,7 @@ public final class GameDao {
     return OfyGameConfig.toDto(gameRefId, sessionParamsProvider.getPlayerToken(), gameEntity.getGameConfig());
   }
 
-  public OfyGameState getGameState() {
+  private OfyGameState getGameState() {
     Key<GameEntity> gameRefKey = Key.create(GameEntity.class, sessionParamsProvider.getGameRef());
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
 

@@ -4,10 +4,12 @@ import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayerHand;
 import net.rk.splendid.dao.entities.OfyResourceFactory;
 import net.rk.splendid.dao.entities.OfyResourceMap;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 
 class TakeFactoryAction implements GameAction {
+  @Autowired FactoryGenerator factoryGenerator;
   private final int[] factoryCoords;
 
   TakeFactoryAction(String payload) {
@@ -41,8 +43,7 @@ class TakeFactoryAction implements GameAction {
     gameState.getBoard().setFactory(
         factoryCoords[0],
         factoryCoords[1],
-        // TODO: extract min/max cost parameters into a shared factory.
-        OfyResourceFactory.createFactory(factoryCoords[0] + 1, factoryCoords[0] + 4));
+        factoryGenerator.apply(factoryCoords[0]));
     gameState.getBoard().setResources(
         gameState.getBoard().getResources().join(remainingCost));
 
