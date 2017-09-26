@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
+import java.util.Properties;
+
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
   static {
@@ -22,6 +24,17 @@ public class Application extends SpringBootServletInitializer {
 
   @Override
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-    return application.sources(Application.class, ObjectifyFilter.class);
+    return application
+        .sources(Application.class, ObjectifyFilter.class)
+        .properties(characterEncodingProperties());
+  }
+
+  private Properties characterEncodingProperties() {
+    Properties characterEncodingProperties = new Properties();
+    characterEncodingProperties.setProperty("spring.http.encoding.charset", "UTF-8");
+    characterEncodingProperties.setProperty("spring.http.encoding.enabled", "true");
+    characterEncodingProperties.setProperty("spring.http.encoding.force", "true");
+    characterEncodingProperties.setProperty("spring.mandatory-file-encoding", "UTF-8");
+    return characterEncodingProperties;
   }
 }
