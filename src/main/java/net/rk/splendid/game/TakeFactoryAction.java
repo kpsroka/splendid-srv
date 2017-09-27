@@ -24,13 +24,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 
 class TakeFactoryAction implements GameAction {
-  @Autowired FactoryGenerator factoryGenerator;
   private final int[] factoryCoords;
+  private final FactoryGenerator factoryGenerator;
 
-  TakeFactoryAction(String payload) {
+  TakeFactoryAction(String payload, FactoryGenerator factoryGenerator) {
     this.factoryCoords = Arrays.stream(payload.split(","))
         .mapToInt(Integer::valueOf)
         .toArray();
+    this.factoryGenerator = factoryGenerator;
   }
 
   @Override

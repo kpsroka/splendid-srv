@@ -26,7 +26,7 @@ public final class GameActions {
       case GameActions.TAKE_RESOURCES:
         return new TakeResourcesAction(payload);
       case GameActions.TAKE_FACTORY:
-        return new TakeFactoryAction(payload);
+        return new TakeFactoryAction(payload, new FactoryGenerator());
       default:
         return NoOp();
     }
