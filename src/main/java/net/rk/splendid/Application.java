@@ -19,7 +19,6 @@ import com.googlecode.objectify.ObjectifyFilter;
 import com.googlecode.objectify.ObjectifyService;
 import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dao.entities.OfyNoSelection;
-import net.rk.splendid.game.FactoryGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -42,7 +41,6 @@ public class Application extends SpringBootServletInitializer {
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
     return application
         .sources(Application.class, ObjectifyFilter.class)
-        .sources(FactoryGenerator.class)
         .properties(characterEncodingProperties());
   }
 
