@@ -20,29 +20,35 @@ import net.rk.splendid.dao.entities.OfyPlayerHand;
 import net.rk.splendid.dao.entities.OfyResourceFactory;
 import net.rk.splendid.dao.entities.OfyResourceMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.Arrays;
 
+@Component
 class TakeFactoryAction implements GameAction {
-  private final int[] factoryCoords;
+  private static final String ACTION_TYPE = "TakeFactory";
   private final FactoryGenerator factoryGenerator;
 
-  TakeFactoryAction(String payload, FactoryGenerator factoryGenerator) {
-    this.factoryCoords = Arrays.stream(payload.split(","))
-        .mapToInt(Integer::valueOf)
-        .toArray();
+  @Autowired
+  TakeFactoryAction(FactoryGenerator factoryGenerator) {
     this.factoryGenerator = factoryGenerator;
   }
 
   @Override
-  public OfyGameState apply(String playerToken, OfyGameState gameState) {
+  public OfyGameState apply(GameActionContext context, OfyGameState gameState) {
+    int[] factoryCoords =
+        Arrays.stream(context.getPayload().split(","))
+            .mapToInt(Integer::valueOf)
+            .toArray();
+
     if (factoryCoords.length != 2) {
       throw new IllegalArgumentException(
           "Invalid factory coords provided: " + Arrays.toString(factoryCoords));
     }
 
     OfyResourceFactory factory = gameState.getBoard().getFactory(factoryCoords[0], factoryCoords[1]);
-    OfyPlayerHand hand = gameState.getPlayerState(playerToken).getHand();
+    OfyPlayerHand hand = gameState.getPlayerState(context.getPlayerToken()).getHand();
 
     OfyResourceMap remainingCost = factory.getCost().reduce(hand.getFactoryResources());
 
@@ -64,5 +70,10 @@ class TakeFactoryAction implements GameAction {
         gameState.getBoard().getResources().join(remainingCost));
 
     return gameState;
+  }
+
+  @Override
+  public String getActionType() {
+    return ACTION_TYPE;
   }
 }

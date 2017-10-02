@@ -19,24 +19,25 @@ import com.google.common.collect.Iterables;
 import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayerHand;
 import net.rk.splendid.dao.entities.OfyResourceMap;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 final class TakeResourcesAction implements GameAction {
-  private final List<Integer> takenResourcesList;
-
-  TakeResourcesAction(String payload) {
-    this.takenResourcesList = Arrays.stream(payload.split(","))
-        .mapToInt(Integer::valueOf)
-        .boxed()
-        .collect(Collectors.toList());
-  }
+  private static final String ACTION_TYPE = "TakeResources";
 
   @Override
-  public OfyGameState apply(String playerToken, OfyGameState gameState) {
+  public OfyGameState apply(GameActionContext context, OfyGameState gameState) {
+    List<Integer> takenResourcesList =
+        Arrays.stream(context.getPayload().split(","))
+            .mapToInt(Integer::valueOf)
+            .boxed()
+            .collect(Collectors.toList());
+
     OfyResourceMap boardResources = gameState.getBoard().getResources();
     OfyResourceMap takenResources = new OfyResourceMap(takenResourcesList);
 
@@ -50,7 +51,7 @@ final class TakeResourcesAction implements GameAction {
     }
 
     gameState.getBoard().setResources(boardResources.reduce(takenResources));
-    OfyPlayerHand playerHand = gameState.getPlayerState(playerToken).getHand();
+    OfyPlayerHand playerHand = gameState.getPlayerState(context.getPlayerToken()).getHand();
     playerHand.setResources(playerHand.getResources().join(takenResources));
 
     return gameState;
@@ -59,5 +60,10 @@ final class TakeResourcesAction implements GameAction {
   private boolean meetsActionCriteria(Map<Integer, Long> takenResourceMap) {
     return (takenResourceMap.size() == 1 && Iterables.getOnlyElement(takenResourceMap.values()).equals(2L))
         || (takenResourceMap.size() == 3 && takenResourceMap.values().stream().allMatch(value -> value.equals(1L)));
+  }
+
+  @Override
+  public String getActionType() {
+    return ACTION_TYPE;
   }
 }

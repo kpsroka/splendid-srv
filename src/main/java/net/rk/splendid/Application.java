@@ -27,7 +27,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 
 import java.util.Properties;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"net.rk.splendid", "net.rk.splendid.game"})
 public class Application extends SpringBootServletInitializer {
   static {
     ObjectifyService.register(GameEntity.class);

@@ -22,7 +22,8 @@ import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameState;
 import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
-import net.rk.splendid.game.GameActions;
+import net.rk.splendid.game.GameActionContext;
+import net.rk.splendid.game.GameActionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public final class GameDataController {
   @Autowired private GameDao gameDao;
   @Autowired private CommonSessionParameters commonSessionParameters;
+  @Autowired private GameActionProvider gameActionProvider;
 
   @ModelAttribute
   public void handleCommonAttributes(
@@ -65,12 +67,13 @@ public final class GameDataController {
 
   @RequestMapping("/act")
   public GameState executePlayerAction(
-      @RequestParam("action") String action,
+      @RequestParam("action") String actionType,
       @RequestParam("payload") String payload) {
+    GameActionContext context =
+        new GameActionContext(payload, commonSessionParameters.getPlayerToken());
     GameEntity gameEntity = gameDao.getGameEntity();
     OfyGameState oldState = gameEntity.getGameState();
-    OfyGameState newState = GameActions.GetAction(action, payload)
-        .apply(commonSessionParameters.getPlayerToken(), oldState);
+    OfyGameState newState = gameActionProvider.getAction(actionType).apply(context, oldState);
     newState.incrementRound();
     gameDao.updateGameState(newState);
     return OfyGameState.toDto(

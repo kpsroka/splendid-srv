@@ -15,24 +15,24 @@
 
 package net.rk.splendid.game;
 
-public final class GameActions {
-  private static final String TAKE_RESOURCES = "TakeResources";
-  private static final String TAKE_FACTORY = "TakeFactory";
+import org.springframework.util.Assert;
 
-  private GameActions() {}
+public final class GameActionContext {
+  private final String payload;
+  private final String playerToken;
 
-  public static GameAction GetAction(String name, String payload) {
-    switch (name) {
-      case GameActions.TAKE_RESOURCES:
-        return new TakeResourcesAction(payload);
-      case GameActions.TAKE_FACTORY:
-        return new TakeFactoryAction(payload, new FactoryGenerator());
-      default:
-        return NoOp();
-    }
+  public GameActionContext(String payload, String playerToken) {
+    Assert.notNull(payload, "Null payload given.");
+    Assert.notNull(playerToken, "Null playerToken given.");
+    this.payload = payload;
+    this.playerToken = playerToken;
   }
 
-  private static GameAction NoOp() {
-    return (token, state) -> state;
+  String getPayload() {
+    return payload;
+  }
+
+  String getPlayerToken() {
+    return playerToken;
   }
 }

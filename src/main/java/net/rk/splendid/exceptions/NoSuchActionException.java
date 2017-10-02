@@ -13,12 +13,12 @@
  * limitations under the License.
  */
 
-package net.rk.splendid.game;
+package net.rk.splendid.exceptions;
 
-import net.rk.splendid.dao.entities.OfyGameState;
+import java.util.NoSuchElementException;
 
-import java.util.function.BiFunction;
-
-public interface GameAction extends BiFunction<GameActionContext, OfyGameState, OfyGameState> {
-  String getActionType();
+public final class NoSuchActionException extends NoSuchElementException {
+  public NoSuchActionException(String actionType) {
+    super("No such action: " + actionType);
+  }
 }
