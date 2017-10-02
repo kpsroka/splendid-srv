@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-class TakeFactoryAction implements GameAction {
+final class TakeFactoryAction implements GameAction {
   private static final String ACTION_TYPE = "TakeFactory";
   private final FactoryGenerator factoryGenerator;
 
