@@ -110,8 +110,30 @@ public class TakeFactoryActionTest {
     // a factory of cost [0, 1, 1, 2] we expect to have resources on hand = [0, 2].
 
     Assert.assertEquals(
-        ImmutableMap.builder().put(0, 1L).put(2, 1L).build(),
+        ImmutableMap.of(0, 1L,2, 1L),
         newHand.getResources().asMap());
   }
 
+  @Test
+  public void appendsTakenFactoryResourcesToPlayerHand() {
+    OfyGameState gameState = OfyGameState.create(PLAYER_REFS, factoryGeneratorMock);
+    OfyPlayerHand playerHand = gameState.getPlayerState(PLAYER_REFS[0]).getHand();
+    playerHand.setResources(new OfyResourceMap(Lists.newArrayList(0)));
+    playerHand.addFactory(
+        new OfyResourceFactory(1, 0, new OfyResourceMap(Lists.newArrayList())));
+    gameState.getBoard().setFactory(
+        0,
+        0,
+        new OfyResourceFactory(123, 123, new OfyResourceMap(Lists.newArrayList(0, 1))));
+
+    TakeFactoryAction action = new TakeFactoryAction(factoryGeneratorMock);
+    GameActionContext context = new GameActionContext("0,0", PLAYER_REFS[0]);
+
+    OfyGameState newState = action.apply(context, gameState);
+    OfyPlayerHand newHand = newState.getPlayerState(PLAYER_REFS[0]).getHand();
+
+    Assert.assertEquals(
+        ImmutableMap.of(1, 1L, 123, 1L),
+        newHand.getFactoryResources().asMap());
+  }
 }
