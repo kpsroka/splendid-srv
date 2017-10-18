@@ -17,6 +17,10 @@ Once a player performs an action, the turn is passed to the next player, in a cl
 
 #### Player summary
 
+<div style="display: flex; flex-direction: row; justify-content: center;">
+  <img src="https://kpsroka.github.io/splendid-srv/images/Splendid-player.png" alt="Player summary"/>
+</div>
+
 Each player's status is represented by a box containing five colored fields, with player's name and score written
 underneath. These five fields represent five different resource types: fire (red), earth (green), water (blue), air
 (orange), and aether (grey). Each of the fields in a player's box consists of the resource symbol, number of _resource
@@ -29,6 +33,10 @@ surrounded by two triangular indicators.
 
 #### Resource stacks
 
+<div style="display: flex; flex-direction: row; justify-content: center;">
+  <img src="https://kpsroka.github.io/splendid-srv/images/Splendid-resources.png" alt="Resource stacks"/>
+</div>
+
 At the beginning of the game, the resources are all located on the stacks in the middle part of the view. For each of
 the resource types there are five resource tokens available. A player can obtain the resources from the stack by
 clicking on the resource tokens and clicking the _Take_ button on the right side of the resource stacks. To activate
@@ -38,6 +46,10 @@ the button, a player needs to select either:
 Taking selected resources removes them from the stacks and increases the acting player's resource count.
 
 #### Factory board
+
+<div style="display: flex; flex-direction: row; justify-content: center;">
+  <img src="https://kpsroka.github.io/splendid-srv/images/Splendid-resourceFactory.png" alt="Resource factory"/>
+</div>
 
 Resource factories are represented with a rectangular fields, organized in a grid located in the upper middle part of
 the view. Each resource factory is assigned a resource type, represented by that resource's color and symbol. Collecting
