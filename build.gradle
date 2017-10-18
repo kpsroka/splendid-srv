@@ -3,8 +3,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.google.appengine:gradle-appengine-plugin:1.9.56")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath('com.google.appengine:gradle-appengine-plugin:1.9.56')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE')
     }
 }
 
@@ -23,21 +23,21 @@ war {
 repositories {
     jcenter()
     mavenCentral()
-    maven { url "http://repo.spring.io/libs-snapshot" }
+    maven { url 'http://repo.spring.io/libs-snapshot' }
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    appengineSdk("com.google.appengine:appengine-java-sdk:1.9.54")
-    compile("com.google.guava:guava:19.0")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("com.google.appengine:appengine-endpoints:1.9.54")
-    compile("com.googlecode.objectify:objectify:5.1.21")
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    appengineSdk('com.google.appengine:appengine-java-sdk:1.9.58')
+    compile('com.google.guava:guava:23.0')
+    compile('org.springframework.boot:spring-boot-starter-web:1.5.8.RELEASE')
+    compile('com.google.appengine:appengine-endpoints:1.9.58')
+    compile('com.googlecode.objectify:objectify:5.1.21')
+    providedRuntime('org.springframework.boot:spring-boot-starter-tomcat:1.5.8.RELEASE')
     testCompile('org.mockito:mockito-core:2.+')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.boot:spring-boot-starter-test:1.5.8.RELEASE')
 }
 
 appengine {
