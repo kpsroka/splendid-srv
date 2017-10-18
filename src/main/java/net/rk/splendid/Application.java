@@ -41,7 +41,9 @@ public class Application extends SpringBootServletInitializer {
   protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
     return application
         .sources(Application.class, ObjectifyFilter.class)
-        .properties(characterEncodingProperties());
+        .properties(characterEncodingProperties())
+        .properties(faviconConfigProperties());
+
   }
 
   private Properties characterEncodingProperties() {
@@ -51,5 +53,11 @@ public class Application extends SpringBootServletInitializer {
     characterEncodingProperties.setProperty("spring.http.encoding.force", "true");
     characterEncodingProperties.setProperty("spring.mandatory-file-encoding", "UTF-8");
     return characterEncodingProperties;
+  }
+
+  private Properties faviconConfigProperties() {
+    Properties faviconConfigProperties = new Properties();
+    faviconConfigProperties.setProperty("spring.mvc.favicon.enabled", "false");
+    return faviconConfigProperties;
   }
 }
