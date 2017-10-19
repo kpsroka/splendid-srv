@@ -19,7 +19,6 @@ import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayerHand;
 import net.rk.splendid.dao.entities.OfyResourceFactory;
 import net.rk.splendid.dao.entities.OfyResourceMap;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;

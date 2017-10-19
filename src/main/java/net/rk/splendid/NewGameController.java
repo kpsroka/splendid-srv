@@ -19,14 +19,20 @@ import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.exceptions.PlayerCountOutOfRangeException;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.inject.Inject;
+
 @RestController
 public final class NewGameController {
-  @Autowired private GameDao gameDao;
+  private final GameDao gameDao;
+
+  @Inject
+  public NewGameController(GameDao gameDao) {
+    this.gameDao = gameDao;
+  }
 
   @RequestMapping("/new")
   public GameRef newGame(

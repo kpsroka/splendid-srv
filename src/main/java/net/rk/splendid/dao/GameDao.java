@@ -24,9 +24,9 @@ import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.GameNotFoundException;
 import net.rk.splendid.game.FactoryGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
@@ -36,9 +36,14 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @Component
 public final class GameDao {
+  private final CommonSessionParameters sessionParamsProvider;
+  private final FactoryGenerator factoryGenerator;
 
-  @Autowired private CommonSessionParameters sessionParamsProvider;
-  @Autowired private FactoryGenerator factoryGenerator;
+  @Inject
+  public GameDao(CommonSessionParameters sessionParamsProvider, FactoryGenerator factoryGenerator) {
+    this.sessionParamsProvider = sessionParamsProvider;
+    this.factoryGenerator = factoryGenerator;
+  }
 
   public GameRef createGame(int numberOfPlayers, String playerName) {
     OfyPlayer[] players = new OfyPlayer[numberOfPlayers];

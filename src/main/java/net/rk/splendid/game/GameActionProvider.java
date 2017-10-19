@@ -17,9 +17,9 @@ package net.rk.splendid.game;
 
 import com.google.common.collect.Maps;
 import net.rk.splendid.exceptions.NoSuchActionException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,7 @@ import java.util.Map;
 public final class GameActionProvider {
   private final Map<String, GameAction> gameActionMap;
 
-  @Autowired
+  @Inject
   public GameActionProvider(List<GameAction> gameActions) {
     gameActionMap = Maps.uniqueIndex(gameActions, GameAction::getActionType);
   }

@@ -24,18 +24,26 @@ import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
 import net.rk.splendid.game.GameActionContext;
 import net.rk.splendid.game.GameActionProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.inject.Inject;
+
 @RestController
 @RequestMapping("/game")
 public final class GameDataController {
-  @Autowired private GameDao gameDao;
-  @Autowired private CommonSessionParameters commonSessionParameters;
-  @Autowired private GameActionProvider gameActionProvider;
+  private final GameDao gameDao;
+  private final CommonSessionParameters commonSessionParameters;
+  private final GameActionProvider gameActionProvider;
+
+  @Inject
+  public GameDataController(GameDao gameDao, CommonSessionParameters commonSessionParameters, GameActionProvider gameActionProvider) {
+    this.gameDao = gameDao;
+    this.commonSessionParameters = commonSessionParameters;
+    this.gameActionProvider = gameActionProvider;
+  }
 
   @ModelAttribute
   public void handleCommonAttributes(
