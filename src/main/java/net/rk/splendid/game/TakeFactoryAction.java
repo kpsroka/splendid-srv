@@ -22,6 +22,7 @@ import net.rk.splendid.dao.entities.OfyResourceMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 
 @Component
@@ -29,7 +30,7 @@ final class TakeFactoryAction implements GameAction {
   private static final String ACTION_TYPE = "TakeFactory";
   private final FactoryGenerator factoryGenerator;
 
-  @Autowired
+  @Inject
   TakeFactoryAction(FactoryGenerator factoryGenerator) {
     this.factoryGenerator = factoryGenerator;
   }
