@@ -15,10 +15,7 @@
 
 package net.rk.splendid.game;
 
-import net.rk.splendid.dao.entities.OfyGameState;
-import net.rk.splendid.dao.entities.OfyPlayerHand;
-import net.rk.splendid.dao.entities.OfyResourceFactory;
-import net.rk.splendid.dao.entities.OfyResourceMap;
+import net.rk.splendid.dao.entities.*;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -27,6 +24,8 @@ import java.util.Arrays;
 @Component
 final class TakeFactoryAction implements GameAction {
   private static final String ACTION_TYPE = "TakeFactory";
+
+  static final int SCORE_LIMIT = 25;
   private final FactoryGenerator factoryGenerator;
 
   @Inject
@@ -61,12 +60,17 @@ final class TakeFactoryAction implements GameAction {
     }
 
     hand.addFactory(factory);
+
     gameState.getBoard().setFactory(
         factoryCoords[0],
         factoryCoords[1],
         factoryGenerator.apply(factoryCoords[0]));
     gameState.getBoard().setResources(
         gameState.getBoard().getResources().join(remainingCost));
+
+    if (hand.getScore() >= SCORE_LIMIT) {
+      gameState.setGameStatus(OfyGameStatus.FINISHED);
+    }
 
     return gameState;
   }

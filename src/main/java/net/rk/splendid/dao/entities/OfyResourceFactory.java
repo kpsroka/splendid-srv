@@ -44,4 +44,8 @@ public class OfyResourceFactory {
   int getResource() {
     return color;
   }
+
+  int getPoints() {
+    return points;
+  }
 }

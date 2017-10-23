@@ -58,4 +58,10 @@ public class OfyPlayerHand {
   static OfyPlayerHand create() {
     return new OfyPlayerHand();
   }
+
+  public int getScore() {
+    return factories.stream()
+        .mapToInt(OfyResourceFactory::getPoints)
+        .sum();
+  }
 }

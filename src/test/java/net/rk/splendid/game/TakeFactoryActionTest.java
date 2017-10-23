@@ -17,10 +17,7 @@ package net.rk.splendid.game;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import net.rk.splendid.dao.entities.OfyGameState;
-import net.rk.splendid.dao.entities.OfyPlayerHand;
-import net.rk.splendid.dao.entities.OfyResourceFactory;
-import net.rk.splendid.dao.entities.OfyResourceMap;
+import net.rk.splendid.dao.entities.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
@@ -135,5 +132,32 @@ public class TakeFactoryActionTest {
     Assert.assertEquals(
         ImmutableMap.of(1, 1L, 123, 1L),
         newHand.getFactoryResources().asMap());
+  }
+
+  @Test
+  public void changesGameStateToFinishedIfScoreLimitReached() {
+    when(factoryGeneratorMock.apply(ArgumentMatchers.anyInt())).thenReturn(
+        new OfyResourceFactory(0, 1, new OfyResourceMap(Lists.newArrayList()))
+    );
+
+    OfyGameState gameState = OfyGameState.create(PLAYER_REFS, factoryGeneratorMock);
+    gameState.setGameStatus(OfyGameStatus.UNDERWAY);
+    gameState.getPlayerState(PLAYER_REFS[0]).getHand().addFactory(
+        new OfyResourceFactory(0, TakeFactoryAction.SCORE_LIMIT - 2, new OfyResourceMap(Lists.newArrayList())));
+
+    TakeFactoryAction action = new TakeFactoryAction(factoryGeneratorMock);
+    GameActionContext context = new GameActionContext("0,0", PLAYER_REFS[0]);
+
+    gameState = action.apply(context, gameState);
+    Assert.assertEquals(OfyGameStatus.UNDERWAY, gameState.getGameStatus());
+    Assert.assertEquals(
+        TakeFactoryAction.SCORE_LIMIT - 1,
+        gameState.getPlayerState(PLAYER_REFS[0]).getHand().getScore());
+
+    gameState = action.apply(context, gameState);
+    Assert.assertEquals(OfyGameStatus.FINISHED, gameState.getGameStatus());
+    Assert.assertEquals(
+        TakeFactoryAction.SCORE_LIMIT,
+        gameState.getPlayerState(PLAYER_REFS[0]).getHand().getScore());
   }
 }
