@@ -20,16 +20,12 @@ import com.googlecode.objectify.Key;
 import net.rk.splendid.CommonSessionParameters;
 import net.rk.splendid.dao.entities.*;
 import net.rk.splendid.dto.GameConfig;
-import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.GameNotFoundException;
-import net.rk.splendid.game.FactoryGenerator;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -37,29 +33,14 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 @Component
 public final class GameDao {
   private final CommonSessionParameters sessionParamsProvider;
-  private final FactoryGenerator factoryGenerator;
 
   @Inject
-  public GameDao(CommonSessionParameters sessionParamsProvider, FactoryGenerator factoryGenerator) {
+  public GameDao(CommonSessionParameters sessionParamsProvider) {
     this.sessionParamsProvider = sessionParamsProvider;
-    this.factoryGenerator = factoryGenerator;
   }
 
-  public GameRef createGame(int numberOfPlayers, String playerName) {
-    OfyPlayer[] players = new OfyPlayer[numberOfPlayers];
-    Arrays.setAll(players, i -> OfyPlayer.create(i, i == 0 ? playerName : "Waiting…"));
-    String[] playerRefs = new String[numberOfPlayers];
-    Arrays.setAll(playerRefs, i -> UUID.randomUUID().toString());
-
-    OfyGameConfig gameConfig = OfyGameConfig.create(players, playerRefs);
-    gameConfig.setPlayerJoined(playerRefs[0]);
-
-    OfyGameState gameState = OfyGameState.create(playerRefs, factoryGenerator);
-    gameState.setGameStatus(OfyGameStatus.PREPARING);
-
-    GameEntity entity = new GameEntity(gameConfig, gameState);
-    ofy().save().entity(entity).now();
-    return new GameRef(entity.getId(), playerRefs[0]);
+  public void storeGame(GameEntity gameEntity) {
+    ofy().save().entity(gameEntity).now();
   }
 
   public GameConfig getGameConfig() {
