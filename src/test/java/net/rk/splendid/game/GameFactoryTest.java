@@ -15,7 +15,6 @@
 
 package net.rk.splendid.game;
 
-import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dao.entities.OfyResourceFactory;
 import net.rk.splendid.dao.entities.OfyResourceMap;
 import org.assertj.core.util.Lists;
