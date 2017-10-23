@@ -37,7 +37,7 @@ dependencies {
     compile('com.google.appengine:appengine-endpoints:1.9.58')
     compile('com.googlecode.objectify:objectify:5.1.21')
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat:1.5.8.RELEASE')
-    testCompile('org.mockito:mockito-core:2.+')
+    testCompile('org.mockito:mockito-core:2.9.0')
     testCompile('org.springframework.boot:spring-boot-starter-test:1.5.8.RELEASE')
 }
 
