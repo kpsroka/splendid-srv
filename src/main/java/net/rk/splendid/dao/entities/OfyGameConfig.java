@@ -67,7 +67,7 @@ public class OfyGameConfig {
     SortedMap<String, OfyPlayer> orderedPlayers =
         new TreeMap<>(Comparator.comparingInt(token -> players.get(token).getIndex()));
     orderedPlayers.putAll(players);
-    return players;
+    return orderedPlayers;
   }
 
   public void setPlayerJoined(String playerToken) {
