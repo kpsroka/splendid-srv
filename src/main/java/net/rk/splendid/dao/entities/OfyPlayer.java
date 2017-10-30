@@ -41,15 +41,19 @@ public class OfyPlayer {
     return new OfyPlayer(name, index);
   }
 
-  public boolean hasJoined() {
-    return this.joined;
-  }
-
   void setJoined() {
     this.joined = true;
   }
 
+  public boolean hasJoined() {
+    return this.joined;
+  }
+
   void setName(String name) {
     this.name = name;
+  }
+
+  public String getName() {
+    return name;
   }
 }
