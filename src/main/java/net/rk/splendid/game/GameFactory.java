@@ -16,8 +16,6 @@
 package net.rk.splendid.game;
 
 import net.rk.splendid.dao.entities.*;
-import net.rk.splendid.game.FactoryGenerator;
-import net.rk.splendid.game.NewGameOptions;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
