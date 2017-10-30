@@ -15,10 +15,10 @@
 
 package net.rk.splendid.game;
 
-final class JoinGameParameters {
+public final class JoinGameParameters {
   private final String playerName;
 
-  JoinGameParameters(String playerName) {
+  public JoinGameParameters(String playerName) {
     this.playerName = playerName;
   }
 

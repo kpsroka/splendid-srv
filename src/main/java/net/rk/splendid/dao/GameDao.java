@@ -15,18 +15,17 @@
 
 package net.rk.splendid.dao;
 
-import com.google.common.collect.Iterables;
 import com.googlecode.objectify.Key;
 import net.rk.splendid.CommonSessionParameters;
-import net.rk.splendid.dao.entities.*;
+import net.rk.splendid.dao.entities.GameEntity;
+import net.rk.splendid.dao.entities.OfyGameConfig;
+import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.GameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -77,35 +76,6 @@ public final class GameDao {
     } else {
       throw new GameNotFoundException();
     }
-  }
-
-  public String joinPlayer(String playerName) {
-    GameEntity gameEntity = getGameEntity();
-    Map<String, OfyPlayer> players = gameEntity.getGameConfig().getPlayersOrdered();
-
-    Map.Entry<String, OfyPlayer> joinedPlayer = Iterables.getFirst(
-        players.entrySet().stream()
-            .filter(e -> !e.getValue().hasJoined())
-            .collect(Collectors.toList()),
-        null
-    );
-
-    if (joinedPlayer == null) {
-      throw new IllegalStateException("All players joined already.");
-    }
-
-    gameEntity.getGameConfig().setPlayerName(joinedPlayer.getKey(), playerName);
-    gameEntity.getGameConfig().setPlayerJoined(joinedPlayer.getKey());
-
-    if (players.values().stream()
-        .map(OfyPlayer::hasJoined)
-        .reduce(true, Boolean::logicalAnd)) {
-      gameEntity.getGameState().setGameStatus(OfyGameStatus.UNDERWAY);
-    }
-
-    ofy().save().entity(gameEntity);
-
-    return joinedPlayer.getKey();
   }
 
   public GameStatus getGameStatus() {

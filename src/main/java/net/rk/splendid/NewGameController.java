@@ -21,6 +21,8 @@ import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.exceptions.PlayerCountOutOfRangeException;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
 import net.rk.splendid.game.GameFactory;
+import net.rk.splendid.game.GameJoiner;
+import net.rk.splendid.game.JoinGameParameters;
 import net.rk.splendid.game.NewGameOptions;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,15 +34,18 @@ import javax.inject.Inject;
 public final class NewGameController {
   private final GameFactory gameFactory;
   private final GameDao gameDao;
+  private GameJoiner gameJoiner;
   private final CommonSessionParameters sessionParameters;
 
   @Inject
   public NewGameController(
       GameFactory gameFactory,
       GameDao gameDao,
+      GameJoiner gameJoiner,
       CommonSessionParameters sessionParameters) {
     this.gameFactory = gameFactory;
     this.gameDao = gameDao;
+    this.gameJoiner = gameJoiner;
     this.sessionParameters = sessionParameters;
   }
 
@@ -58,10 +63,10 @@ public final class NewGameController {
 
     NewGameOptions options = new NewGameOptions(playerCount);
     GameEntity gameEntity = gameFactory.apply(options);
+    String playerToken = gameJoiner.joinGame(gameEntity, new JoinGameParameters(playerName));
+
     sessionParameters.setGameRef(gameEntity.getId());
     gameDao.storeGame(gameEntity);
-
-    String playerToken = gameDao.joinPlayer(playerName);
     return new GameRef(gameEntity.getId(), playerToken);
   }
 }
