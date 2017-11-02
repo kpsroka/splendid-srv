@@ -29,18 +29,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 @RestController
 public final class NewGameController {
+  static final int MAX_PLAYERS_ALLOWED = 5;
   private final GameFactory gameFactory;
-  private final GameDao gameDao;
-  private GameJoiner gameJoiner;
+  private final Provider<GameDao> gameDao;
+  private final GameJoiner gameJoiner;
   private final CommonSessionParameters sessionParameters;
 
   @Inject
   public NewGameController(
       GameFactory gameFactory,
-      GameDao gameDao,
+      Provider<GameDao> gameDao,
       GameJoiner gameJoiner,
       CommonSessionParameters sessionParameters) {
     this.gameFactory = gameFactory;
@@ -57,7 +59,7 @@ public final class NewGameController {
       throw new PlayerNameEmptyException();
     }
 
-    if (playerCount < 2 || playerCount > 5) {
+    if (playerCount < 2 || playerCount > MAX_PLAYERS_ALLOWED) {
       throw new PlayerCountOutOfRangeException(playerCount);
     }
 
@@ -66,7 +68,7 @@ public final class NewGameController {
     String playerToken = gameJoiner.joinGame(gameEntity, new JoinGameParameters(playerName));
 
     sessionParameters.setGameRef(gameEntity.getId());
-    gameDao.storeGame(gameEntity);
+    gameDao.get().storeGame(gameEntity);
     return new GameRef(gameEntity.getId(), playerToken);
   }
 }

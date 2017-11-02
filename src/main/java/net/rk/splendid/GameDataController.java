@@ -32,22 +32,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 @RestController
 @RequestMapping("/game")
 public final class GameDataController {
-  private final GameDao gameDao;
-  private GameJoiner gameJoiner;
+  private final Provider<GameDao> gameDaoProvider;
+  private final GameJoiner gameJoiner;
   private final CommonSessionParameters commonSessionParameters;
   private final GameActionProvider gameActionProvider;
 
   @Inject
   public GameDataController(
-      GameDao gameDao,
+      Provider<GameDao> gameDaoProvider,
       GameJoiner gameJoiner,
       CommonSessionParameters commonSessionParameters,
       GameActionProvider gameActionProvider) {
-    this.gameDao = gameDao;
+    this.gameDaoProvider = gameDaoProvider;
     this.gameJoiner = gameJoiner;
     this.commonSessionParameters = commonSessionParameters;
     this.gameActionProvider = gameActionProvider;
@@ -63,13 +64,13 @@ public final class GameDataController {
 
   @RequestMapping("/getConfig")
   public GameConfig getGameConfig() {
-    return gameDao.getGameConfig();
+    return gameDaoProvider.get().getGameConfig();
   }
 
   @RequestMapping("/getState")
   public GameState getGameState(
       @RequestParam(value = "lastRound", defaultValue = "-1") int lastRound) {
-    GameEntity gameEntity = gameDao.getGameEntity();
+    GameEntity gameEntity = gameDaoProvider.get().getGameEntity();
 
     if (lastRound >= 0 && gameEntity.getGameState().getRound() <= lastRound) {
       return null;
@@ -87,11 +88,13 @@ public final class GameDataController {
       @RequestParam("payload") String payload) {
     GameActionContext context =
         new GameActionContext(payload, commonSessionParameters.getPlayerToken());
+    GameDao gameDao = this.gameDaoProvider.get();
     GameEntity gameEntity = gameDao.getGameEntity();
     OfyGameState oldState = gameEntity.getGameState();
     OfyGameState newState = gameActionProvider.getAction(actionType).apply(context, oldState);
     newState.incrementRound();
     gameDao.updateGameState(newState);
+
     return OfyGameState.toDto(
         newState,
         gameEntity.getGameConfig(),
@@ -104,6 +107,7 @@ public final class GameDataController {
       throw new PlayerNameEmptyException();
     }
 
+    GameDao gameDao = gameDaoProvider.get();
     JoinGameParameters parameters = new JoinGameParameters(playerName);
     GameEntity entity = gameDao.getGameEntity();
     commonSessionParameters.setPlayerToken(gameJoiner.joinGame(entity, parameters));
@@ -114,6 +118,6 @@ public final class GameDataController {
 
   @RequestMapping("/getStatus")
   public GameStatus getGameStatus() {
-    return gameDao.getGameStatus();
+    return gameDaoProvider.get().getGameStatus();
   }
 }

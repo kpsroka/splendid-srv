@@ -22,7 +22,7 @@ public final class JoinGameParameters {
     this.playerName = playerName;
   }
 
-  String getPlayerName() {
+  public String getPlayerName() {
     return playerName;
   }
 }
