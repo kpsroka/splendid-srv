@@ -14,6 +14,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 apply plugin: 'maven'
 apply plugin: 'appengine'
+apply plugin: 'jacoco'
 
 war {
     baseName = 'splendid-srv'
@@ -39,6 +40,10 @@ dependencies {
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat:1.5.8.RELEASE')
     testCompile('org.mockito:mockito-core:2.9.0')
     testCompile('org.springframework.boot:spring-boot-starter-test:1.5.8.RELEASE')
+}
+
+test {
+    finalizedBy jacocoTestReport
 }
 
 appengine {
