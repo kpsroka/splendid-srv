@@ -17,6 +17,7 @@ package net.rk.splendid.game;
 
 import net.rk.splendid.dao.entities.*;
 import net.rk.splendid.exceptions.AllPlayersJoinedException;
+import net.rk.splendid.exceptions.DuplicatePlayerNameException;
 import org.assertj.core.util.Lists;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,6 +60,22 @@ public class GameJoinerImplTest {
       gameJoiner.joinGame(entity, new JoinGameParameters("D"));
       Assert.fail("Should have thrown AllPlayersJoinedException");
     } catch (AllPlayersJoinedException e) {
+      // pass!
+    }
+  }
+
+  @Test
+  public void throwsExceptionOnDuplicatePlayerName() {
+    gameConfig.setPlayerJoined(playerRefs[0]);
+
+    GameEntity entity = new GameEntity(gameConfig, gameState);
+    GameJoinerImpl gameJoiner = new GameJoinerImpl();
+
+    try {
+      // "A" is the first player's name.
+      gameJoiner.joinGame(entity, new JoinGameParameters("A"));
+      Assert.fail("Should have thrown DuplicatePlayerNameException");
+    } catch (DuplicatePlayerNameException e) {
       // pass!
     }
   }

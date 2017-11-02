@@ -21,6 +21,7 @@ import net.rk.splendid.dao.entities.OfyGameConfig;
 import net.rk.splendid.dao.entities.OfyGameStatus;
 import net.rk.splendid.dao.entities.OfyPlayer;
 import net.rk.splendid.exceptions.AllPlayersJoinedException;
+import net.rk.splendid.exceptions.DuplicatePlayerNameException;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -31,6 +32,11 @@ public final class GameJoinerImpl implements GameJoiner {
   public String joinGame(GameEntity gameEntity, JoinGameParameters parameters) {
     OfyGameConfig gameConfig = gameEntity.getGameConfig();
     Map<String, OfyPlayer> players = gameConfig.getPlayersOrdered();
+
+    if (players.values().stream()
+        .anyMatch(player -> player.getName().equals(parameters.getPlayerName()))) {
+      throw new DuplicatePlayerNameException(parameters.getPlayerName());
+    }
 
     Map.Entry<String, OfyPlayer> joinedPlayer = Iterables.getFirst(
         players.entrySet().stream()
