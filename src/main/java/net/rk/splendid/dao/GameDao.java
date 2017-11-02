@@ -15,70 +15,16 @@
 
 package net.rk.splendid.dao;
 
-import com.googlecode.objectify.Key;
-import net.rk.splendid.CommonSessionParameters;
 import net.rk.splendid.dao.entities.GameEntity;
-import net.rk.splendid.dao.entities.OfyGameConfig;
 import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameStatus;
-import net.rk.splendid.exceptions.GameNotFoundException;
-import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
+public interface GameDao {
+  GameEntity getGameEntity();
+  GameConfig getGameConfig();
+  GameStatus getGameStatus();
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
-
-@Component
-public final class GameDao {
-  private final CommonSessionParameters sessionParamsProvider;
-
-  @Inject
-  public GameDao(CommonSessionParameters sessionParamsProvider) {
-    this.sessionParamsProvider = sessionParamsProvider;
-  }
-
-  public void storeGame(GameEntity gameEntity) {
-    ofy().save().entity(gameEntity).now();
-  }
-
-  public GameConfig getGameConfig() {
-    String gameRefId = sessionParamsProvider.getGameRef();
-    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
-    GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-    return OfyGameConfig.toDto(gameRefId, sessionParamsProvider.getPlayerToken(), gameEntity.getGameConfig());
-  }
-
-  private OfyGameState getGameState() {
-    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, sessionParamsProvider.getGameRef());
-    GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-
-    if (gameEntity == null) {
-      throw new GameNotFoundException();
-    }
-
-    return gameEntity.getGameState();
-  }
-
-  public void updateGameState(OfyGameState newState) {
-    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, this.sessionParamsProvider.getGameRef());
-    GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-    gameEntity.setGameState(newState);
-    ofy().save().entity(gameEntity);
-  }
-
-  public GameEntity getGameEntity() {
-    Key<GameEntity> gameRefKey =
-        Key.create(GameEntity.class, sessionParamsProvider.getGameRef());
-    GameEntity entity = ofy().load().key(gameRefKey).now();
-    if (entity != null) {
-      return entity;
-    } else {
-      throw new GameNotFoundException();
-    }
-  }
-
-  public GameStatus getGameStatus() {
-    return new GameStatus(getGameState().getGameStatus().name());
-  }
+  void storeGame(GameEntity gameEntity);
+  void updateGameState(OfyGameState newState);
 }
