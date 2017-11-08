@@ -64,4 +64,15 @@ Paying for a factory always makes use of the permanent resources from the previo
 permanent resources is not enough to pay for a factory, resources obtained from the resource stacks are used. These
 stack resources are, upon collection of a factory, deducted from the acting player's count, and returned to the stacks.
 
+### How to run
 
+Splendid requires Google App Engine to run. Before proceeding,
+[download the latest AppEngine SDK for Java](https://cloud.google.com/appengine/docs/standard/java/download). Extract it
+in any directory you want, and set environment variable APPENGINE_HOME to the top of the extracted directory structure.
+
+Once that's done, cd to the root of the Splendid directory and execute `./gradlew appengineRun`, which will compile
+Splendid's code, and start the development server on port 3001. If this port is taken, the command will fail. You can
+change the port that Splendid uses by modifying the `appengine` section in the `build.gradle` file.
+
+Navigate to http://localhost:3001/ (or other port that you've chosen) in your favorite browser to launch the game. The
+server will continue to run until you kill the process started by the `gradlew` command.
