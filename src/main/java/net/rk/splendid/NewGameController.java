@@ -20,10 +20,7 @@ import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.exceptions.PlayerCountOutOfRangeException;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
-import net.rk.splendid.game.GameFactory;
-import net.rk.splendid.game.GameJoiner;
-import net.rk.splendid.game.JoinGameParameters;
-import net.rk.splendid.game.NewGameOptions;
+import net.rk.splendid.game.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,20 +32,17 @@ import javax.inject.Provider;
 public final class NewGameController {
   static final int MAX_PLAYERS_ALLOWED = 5;
   private final GameFactory gameFactory;
-  private final Provider<GameDao> gameDao;
+  private final GameDaoProvider gameDaoProvider;
   private final GameJoiner gameJoiner;
-  private final CommonSessionParameters sessionParameters;
 
   @Inject
   public NewGameController(
       GameFactory gameFactory,
-      Provider<GameDao> gameDao,
-      GameJoiner gameJoiner,
-      CommonSessionParameters sessionParameters) {
+      GameDaoProvider gameDaoProvider,
+      GameJoiner gameJoiner) {
     this.gameFactory = gameFactory;
-    this.gameDao = gameDao;
+    this.gameDaoProvider = gameDaoProvider;
     this.gameJoiner = gameJoiner;
-    this.sessionParameters = sessionParameters;
   }
 
   @RequestMapping("/new")
@@ -66,9 +60,8 @@ public final class NewGameController {
     NewGameOptions options = new NewGameOptions(playerCount);
     GameEntity gameEntity = gameFactory.apply(options);
     String playerToken = gameJoiner.joinGame(gameEntity, new JoinGameParameters(playerName));
+    gameDaoProvider.getGameDao(ModelParametersProvider.EMPTY).storeGame(gameEntity);
 
-    sessionParameters.setGameRef(gameEntity.getId());
-    gameDao.get().storeGame(gameEntity);
     return new GameRef(gameEntity.getId(), playerToken);
   }
 }

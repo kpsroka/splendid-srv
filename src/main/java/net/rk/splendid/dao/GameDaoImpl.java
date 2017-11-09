@@ -30,7 +30,7 @@ import javax.inject.Named;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @Named
-final class GameDaoImpl implements GameDao {
+public final class GameDaoImpl implements GameDao {
   private final ModelParametersProvider modelParametersProvider;
 
   @Inject

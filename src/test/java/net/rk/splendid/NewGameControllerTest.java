@@ -21,6 +21,7 @@ import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.exceptions.PlayerCountOutOfRangeException;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
 import net.rk.splendid.game.FactoryGenerator;
+import net.rk.splendid.game.GameDaoProvider;
 import net.rk.splendid.game.GameFactory;
 import net.rk.splendid.game.GameJoiner;
 import org.assertj.core.util.Lists;
@@ -29,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -46,6 +46,7 @@ import static org.mockito.Mockito.when;
 @RunWith(JUnit4.class)
 public class NewGameControllerTest {
   @Mock private GameDao gameDao;
+  @Mock private GameDaoProvider gameDaoProviderInterface;
   @Mock private Provider<GameDao> gameDaoProvider;
   @Mock private GameFactory gameFactory;
   @Mock private GameJoiner gameJoiner;
@@ -76,15 +77,13 @@ public class NewGameControllerTest {
         .thenReturn("DefaultPlayerRef");
 
     when(gameDaoProvider.get()).thenReturn(gameDao);
+    when(gameDaoProviderInterface.getGameDao(any())).thenReturn(gameDao);
   }
 
   @Test
   public void throwsExceptionOnOnePlayerGameRequested() {
-    NewGameController controller = new NewGameController(
-        gameFactory,
-        gameDaoProvider,
-        gameJoiner,
-        new CommonSessionParameters());
+    NewGameController controller =
+        new NewGameController(gameFactory, gameDaoProviderInterface, gameJoiner);
 
     try {
       controller.newGame("Player", 1);
@@ -96,11 +95,8 @@ public class NewGameControllerTest {
 
   @Test
   public void throwsExceptionOnTooManyPlayersRequested() {
-    NewGameController controller = new NewGameController(
-        gameFactory,
-        gameDaoProvider,
-        gameJoiner,
-        new CommonSessionParameters());
+    NewGameController controller =
+        new NewGameController(gameFactory, gameDaoProviderInterface, gameJoiner);
 
     try {
       controller.newGame("Player", NewGameController.MAX_PLAYERS_ALLOWED + 1);
@@ -112,11 +108,8 @@ public class NewGameControllerTest {
 
   @Test
   public void throwsExceptionOnEmptyPlayerName() {
-    NewGameController controller = new NewGameController(
-        gameFactory,
-        gameDaoProvider,
-        gameJoiner,
-        new CommonSessionParameters());
+    NewGameController controller =
+        new NewGameController(gameFactory, gameDaoProviderInterface, gameJoiner);
 
     try {
       controller.newGame("", 2);
@@ -140,11 +133,9 @@ public class NewGameControllerTest {
         argThat(params -> params.getPlayerName().equals(expectedPlayerName))))
         .thenReturn(expectedPlayerRef);
 
-    NewGameController controller = new NewGameController(
-        gameFactory,
-        gameDaoProvider,
-        gameJoiner,
-        new CommonSessionParameters());
+    NewGameController controller =
+        new NewGameController(gameFactory, gameDaoProviderInterface, gameJoiner);
+
     GameRef gameRef = controller.newGame(expectedPlayerName, 2);
     assertEquals(newGameEntity.getId(), gameRef.getGameId());
     assertEquals(expectedPlayerRef, gameRef.getPlayerToken());

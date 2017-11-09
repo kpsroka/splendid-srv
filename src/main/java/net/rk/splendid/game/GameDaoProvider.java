@@ -13,21 +13,11 @@
  * limitations under the License.
  */
 
-package net.rk.splendid;
+package net.rk.splendid.game;
 
-public interface ModelParametersProvider {
-  String getGameRef();
-  String getPlayerToken();
+import net.rk.splendid.ModelParametersProvider;
+import net.rk.splendid.dao.GameDao;
 
-  ModelParametersProvider EMPTY = new ModelParametersProvider() {
-    @Override
-    public String getGameRef() {
-      throw new NullPointerException("Empty");
-    }
-
-    @Override
-    public String getPlayerToken() {
-      throw new NullPointerException("Empty");
-    }
-  };
+public interface GameDaoProvider {
+  GameDao getGameDao(ModelParametersProvider modelParametersProvider);
 }
