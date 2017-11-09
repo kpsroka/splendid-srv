@@ -26,7 +26,7 @@ import java.io.Serializable;
 @Scope(
     scopeName = WebApplicationContext.SCOPE_SESSION,
     proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class CommonSessionParameters implements Serializable {
+public class CommonSessionParameters implements Serializable, ModelParametersProvider {
   private String gameRef;
   private String playerToken;
 
@@ -40,6 +40,7 @@ public class CommonSessionParameters implements Serializable {
     this.playerToken = playerToken;
   }
 
+  @Override
   public String getGameRef() {
     if (gameRef != null) {
       return gameRef;
@@ -48,6 +49,7 @@ public class CommonSessionParameters implements Serializable {
     }
   }
 
+  @Override
   public String getPlayerToken() {
     if (playerToken != null) {
       return playerToken ;
