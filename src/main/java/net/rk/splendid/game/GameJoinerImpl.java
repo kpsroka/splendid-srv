@@ -22,12 +22,12 @@ import net.rk.splendid.dao.entities.OfyGameStatus;
 import net.rk.splendid.dao.entities.OfyPlayer;
 import net.rk.splendid.exceptions.AllPlayersJoinedException;
 import net.rk.splendid.exceptions.DuplicatePlayerNameException;
-import org.springframework.stereotype.Component;
 
+import javax.inject.Named;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
+@Named
 public final class GameJoinerImpl implements GameJoiner {
   public String joinGame(GameEntity gameEntity, JoinGameParameters parameters) {
     OfyGameConfig gameConfig = gameEntity.getGameConfig();

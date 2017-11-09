@@ -17,12 +17,12 @@ package net.rk.splendid;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.inject.Named;
 import java.io.Serializable;
 
-@Component
+@Named
 @Scope(
     scopeName = WebApplicationContext.SCOPE_SESSION,
     proxyMode = ScopedProxyMode.TARGET_CLASS)

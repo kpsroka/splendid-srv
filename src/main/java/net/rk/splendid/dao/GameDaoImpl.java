@@ -23,13 +23,13 @@ import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.GameNotFoundException;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
-@Component
+@Named
 final class GameDaoImpl implements GameDao {
   private final ModelParametersProvider modelParametersProvider;
 

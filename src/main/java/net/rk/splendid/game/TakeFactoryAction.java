@@ -16,12 +16,12 @@
 package net.rk.splendid.game;
 
 import net.rk.splendid.dao.entities.*;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Arrays;
 
-@Component
+@Named
 final class TakeFactoryAction implements GameAction {
   private static final String ACTION_TYPE = "TakeFactory";
 

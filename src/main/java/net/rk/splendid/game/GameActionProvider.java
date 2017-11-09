@@ -17,13 +17,13 @@ package net.rk.splendid.game;
 
 import com.google.common.collect.Maps;
 import net.rk.splendid.exceptions.NoSuchActionException;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Named
 public final class GameActionProvider {
   private final Map<String, GameAction> gameActionMap;
 

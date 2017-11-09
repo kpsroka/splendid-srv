@@ -17,13 +17,13 @@ package net.rk.splendid.game;
 
 import net.rk.splendid.dao.entities.OfyResourceFactory;
 import net.rk.splendid.dao.entities.OfyResourceMap;
-import org.springframework.stereotype.Component;
 
+import javax.inject.Named;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@Component
+@Named
 final class FactoryGeneratorImpl implements FactoryGenerator {
   @Override
   public OfyResourceFactory apply(Integer row) {

@@ -19,14 +19,14 @@ import com.google.common.collect.Iterables;
 import net.rk.splendid.dao.entities.OfyGameState;
 import net.rk.splendid.dao.entities.OfyPlayerHand;
 import net.rk.splendid.dao.entities.OfyResourceMap;
-import org.springframework.stereotype.Component;
 
+import javax.inject.Named;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Component
+@Named
 final class TakeResourcesAction implements GameAction {
   private static final String ACTION_TYPE = "TakeResources";
 

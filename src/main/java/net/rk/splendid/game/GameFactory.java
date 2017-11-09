@@ -16,14 +16,14 @@
 package net.rk.splendid.game;
 
 import net.rk.splendid.dao.entities.*;
-import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Function;
 
-@Component
+@Named
 public class GameFactory implements Function<NewGameOptions, GameEntity> {
 
   private final FactoryGenerator factoryGenerator;
