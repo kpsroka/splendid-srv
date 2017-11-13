@@ -24,13 +24,13 @@ enum SelectionType {
 }
 
 abstract class OfySelection {
-  @Ignore SelectionType selectionType;
+  abstract SelectionType getSelectionType();
 
   static Selection toDto(OfySelection ofySelection) {
-    if (ofySelection.selectionType.equals(SelectionType.NO_SELECTION)) {
+    if (ofySelection.getSelectionType().equals(SelectionType.NO_SELECTION)) {
       return new NoSelection();
     } else {
-      throw new IllegalArgumentException("Not supported type: " + ofySelection.selectionType);
+      throw new IllegalArgumentException("Not supported type: " + ofySelection.getSelectionType());
     }
   }
 }
