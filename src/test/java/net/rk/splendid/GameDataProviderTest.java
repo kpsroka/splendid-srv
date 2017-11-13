@@ -31,15 +31,10 @@ import org.junit.runners.JUnit4;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import javax.inject.Provider;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
@@ -47,13 +42,12 @@ public class GameDataProviderTest {
   @Mock private CommonSessionParameters commonSessionParameters;
   @Mock private GameJoiner gameJoiner;
   @Mock private GameDao gameDao;
-  @Mock private Provider<GameDao> gameDaoProvider;
+  @Mock private GameDaoProvider gameDaoProvider;
   @Mock private FactoryGenerator factoryGenerator;
 
   @Before
   public void setUp() {
     MockitoAnnotations.initMocks(this);
-    when(gameDaoProvider.get()).thenReturn(gameDao);
     when(factoryGenerator.apply(anyInt())).thenReturn(
         new OfyResourceFactory(0, 0, new OfyResourceMap(Lists.newArrayList())));
   }
@@ -62,6 +56,7 @@ public class GameDataProviderTest {
   public void returnsGameStatusForPlayer() {
     GameStatus providedStatus = new GameStatus("expectedStatus");
     when(gameDao.getGameStatus()).thenReturn(providedStatus);
+    when(gameDaoProvider.getGameDao(any())).thenReturn(gameDao);
 
     GameDataController controller = new GameDataController(
         gameDaoProvider,
@@ -76,6 +71,7 @@ public class GameDataProviderTest {
   public void returnsGameConfigForPlayer() {
     GameConfig providedConfig = new GameConfig(new GameRef("", ""), new Player[]{});
     when(gameDao.getGameConfig()).thenReturn(providedConfig);
+    when(gameDaoProvider.getGameDao(any())).thenReturn(gameDao);
 
     GameDataController controller = new GameDataController(
         gameDaoProvider,
@@ -98,6 +94,7 @@ public class GameDataProviderTest {
             new String[] { playerToken }, factoryGenerator));
 
     when(gameDao.getGameEntity()).thenReturn(providedEntity);
+    when(gameDaoProvider.getGameDao(any())).thenReturn(gameDao);
     when(commonSessionParameters.getPlayerToken()).thenReturn(playerToken);
 
     GameDataController controller = new GameDataController(
@@ -123,6 +120,7 @@ public class GameDataProviderTest {
         OfyGameState.create(
             new String[] { playerToken }, factoryGenerator));
     when(gameDao.getGameEntity()).thenReturn(providedEntity);
+    when(gameDaoProvider.getGameDao(any())).thenReturn(gameDao);
     when(commonSessionParameters.getPlayerToken()).thenReturn(playerToken);
 
     String actionType = "AcTiOn_TyPe";
@@ -176,6 +174,7 @@ public class GameDataProviderTest {
         OfyGameState.create(
             new String[] { playerToken }, factoryGenerator));
     when(gameDao.getGameEntity()).thenReturn(providedEntity);
+    when(gameDaoProvider.getGameDao(any())).thenReturn(gameDao);
 
     String playerName = "PlAyEr_NaMe";
     String newPlayerToken = "New_Player_Token";

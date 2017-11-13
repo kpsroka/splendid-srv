@@ -22,29 +22,25 @@ import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameState;
 import net.rk.splendid.dto.GameStatus;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
-import net.rk.splendid.game.GameActionContext;
-import net.rk.splendid.game.GameActionProvider;
-import net.rk.splendid.game.GameJoiner;
-import net.rk.splendid.game.JoinGameParameters;
+import net.rk.splendid.game.*;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 @RestController
 @RequestMapping("/game")
 public final class GameDataController {
-  private final Provider<GameDao> gameDaoProvider;
+  private final GameDaoProvider gameDaoProvider;
   private final GameJoiner gameJoiner;
   private final CommonSessionParameters commonSessionParameters;
   private final GameActionProvider gameActionProvider;
 
   @Inject
   public GameDataController(
-      Provider<GameDao> gameDaoProvider,
+      GameDaoProvider gameDaoProvider,
       GameJoiner gameJoiner,
       CommonSessionParameters commonSessionParameters,
       GameActionProvider gameActionProvider) {
@@ -64,13 +60,13 @@ public final class GameDataController {
 
   @RequestMapping("/getConfig")
   public GameConfig getGameConfig() {
-    return gameDaoProvider.get().getGameConfig();
+    return gameDaoProvider.getGameDao(commonSessionParameters).getGameConfig();
   }
 
   @RequestMapping("/getState")
   public GameState getGameState(
       @RequestParam(value = "lastRound", defaultValue = "-1") int lastRound) {
-    GameEntity gameEntity = gameDaoProvider.get().getGameEntity();
+    GameEntity gameEntity = gameDaoProvider.getGameDao(commonSessionParameters).getGameEntity();
 
     if (lastRound >= 0 && gameEntity.getGameState().getRound() <= lastRound) {
       return null;
@@ -88,7 +84,7 @@ public final class GameDataController {
       @RequestParam("payload") String payload) {
     GameActionContext context =
         new GameActionContext(payload, commonSessionParameters.getPlayerToken());
-    GameDao gameDao = this.gameDaoProvider.get();
+    GameDao gameDao = this.gameDaoProvider.getGameDao(commonSessionParameters);
     GameEntity gameEntity = gameDao.getGameEntity();
     OfyGameState oldState = gameEntity.getGameState();
     OfyGameState newState = gameActionProvider.getAction(actionType).apply(context, oldState);
@@ -107,7 +103,7 @@ public final class GameDataController {
       throw new PlayerNameEmptyException();
     }
 
-    GameDao gameDao = gameDaoProvider.get();
+    GameDao gameDao = gameDaoProvider.getGameDao(commonSessionParameters);
     JoinGameParameters parameters = new JoinGameParameters(playerName);
     GameEntity entity = gameDao.getGameEntity();
     commonSessionParameters.setPlayerToken(gameJoiner.joinGame(entity, parameters));
@@ -118,6 +114,6 @@ public final class GameDataController {
 
   @RequestMapping("/getStatus")
   public GameStatus getGameStatus() {
-    return gameDaoProvider.get().getGameStatus();
+    return gameDaoProvider.getGameDao(commonSessionParameters).getGameStatus();
   }
 }
