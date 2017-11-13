@@ -38,7 +38,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @RunWith(JUnit4.class)
-public class GameDataProviderTest {
+public class GameDataControllerTest {
   @Mock private CommonSessionParameters commonSessionParameters;
   @Mock private GameJoiner gameJoiner;
   @Mock private GameDao gameDao;
