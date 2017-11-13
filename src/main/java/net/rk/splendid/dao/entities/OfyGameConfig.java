@@ -18,6 +18,7 @@ package net.rk.splendid.dao.entities;
 import net.rk.splendid.dto.GameConfig;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.dto.Player;
+import net.rk.splendid.exceptions.NoSuchPlayerException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -79,6 +80,10 @@ public class OfyGameConfig {
   }
 
   OfyPlayer getPlayer(String playerToken) {
-    return this.players.get(playerToken);
+    if (this.players.containsKey(playerToken)) {
+      return this.players.get(playerToken);
+    } else {
+      throw new NoSuchPlayerException(playerToken);
+    }
   }
 }
