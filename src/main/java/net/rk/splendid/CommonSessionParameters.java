@@ -26,7 +26,7 @@ import java.io.Serializable;
 @Scope(
     scopeName = WebApplicationContext.SCOPE_SESSION,
     proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class CommonSessionParameters implements Serializable, ModelParametersProvider {
+public class CommonSessionParameters implements Serializable, RequestContext {
   private String gameRef;
   private String playerToken;
 

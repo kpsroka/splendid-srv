@@ -16,7 +16,7 @@
 package net.rk.splendid.dao;
 
 import com.googlecode.objectify.Key;
-import net.rk.splendid.ModelParametersProvider;
+import net.rk.splendid.RequestContext;
 import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dao.entities.OfyGameConfig;
 import net.rk.splendid.dao.entities.OfyGameState;
@@ -31,11 +31,11 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @Named
 public final class GameDaoImpl implements GameDao {
-  private final ModelParametersProvider modelParametersProvider;
+  private final RequestContext requestContext;
 
   @Inject
-  public GameDaoImpl(ModelParametersProvider modelParametersProvider) {
-    this.modelParametersProvider = modelParametersProvider;
+  public GameDaoImpl(RequestContext requestContext) {
+    this.requestContext = requestContext;
   }
 
   @Override
@@ -45,14 +45,14 @@ public final class GameDaoImpl implements GameDao {
 
   @Override
   public GameConfig getGameConfig() {
-    String gameRefId = modelParametersProvider.getGameRef();
+    String gameRefId = requestContext.getGameRef();
     Key<GameEntity> gameRefKey = Key.create(GameEntity.class, gameRefId);
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
-    return OfyGameConfig.toDto(gameRefId, modelParametersProvider.getPlayerToken(), gameEntity.getGameConfig());
+    return OfyGameConfig.toDto(gameRefId, requestContext.getPlayerToken(), gameEntity.getGameConfig());
   }
 
   private OfyGameState getGameState() {
-    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, modelParametersProvider.getGameRef());
+    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, requestContext.getGameRef());
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
 
     if (gameEntity == null) {
@@ -64,7 +64,7 @@ public final class GameDaoImpl implements GameDao {
 
   @Override
   public void updateGameState(OfyGameState newState) {
-    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, this.modelParametersProvider.getGameRef());
+    Key<GameEntity> gameRefKey = Key.create(GameEntity.class, this.requestContext.getGameRef());
     GameEntity gameEntity = ofy().load().key(gameRefKey).now();
     gameEntity.setGameState(newState);
     ofy().save().entity(gameEntity);
@@ -73,7 +73,7 @@ public final class GameDaoImpl implements GameDao {
   @Override
   public GameEntity getGameEntity() {
     Key<GameEntity> gameRefKey =
-        Key.create(GameEntity.class, modelParametersProvider.getGameRef());
+        Key.create(GameEntity.class, requestContext.getGameRef());
     GameEntity entity = ofy().load().key(gameRefKey).now();
     if (entity != null) {
       return entity;

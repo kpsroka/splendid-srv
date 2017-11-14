@@ -15,7 +15,7 @@
 
 package net.rk.splendid.game;
 
-import net.rk.splendid.ModelParametersProvider;
+import net.rk.splendid.RequestContext;
 import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dao.GameDaoImpl;
 
@@ -24,7 +24,7 @@ import javax.inject.Named;
 @Named
 final class GameDaoProviderImpl implements GameDaoProvider {
   @Override
-  public GameDao getGameDao(ModelParametersProvider modelParametersProvider) {
-    return new GameDaoImpl(modelParametersProvider);
+  public GameDao getGameDao(RequestContext requestContext) {
+    return new GameDaoImpl(requestContext);
   }
 }

@@ -15,9 +15,9 @@
 
 package net.rk.splendid.game;
 
-import net.rk.splendid.ModelParametersProvider;
+import net.rk.splendid.RequestContext;
 import net.rk.splendid.dao.GameDao;
 
 public interface GameDaoProvider {
-  GameDao getGameDao(ModelParametersProvider modelParametersProvider);
+  GameDao getGameDao(RequestContext requestContext);
 }

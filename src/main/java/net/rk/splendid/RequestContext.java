@@ -15,11 +15,11 @@
 
 package net.rk.splendid;
 
-public interface ModelParametersProvider {
+public interface RequestContext {
   String getGameRef();
   String getPlayerToken();
 
-  ModelParametersProvider EMPTY = new ModelParametersProvider() {
+  RequestContext EMPTY = new RequestContext() {
     @Override
     public String getGameRef() {
       throw new NullPointerException("Empty");

@@ -15,7 +15,6 @@
 
 package net.rk.splendid;
 
-import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dao.entities.GameEntity;
 import net.rk.splendid.dto.GameRef;
 import net.rk.splendid.exceptions.PlayerCountOutOfRangeException;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 @RestController
 public final class NewGameController {
@@ -60,7 +58,7 @@ public final class NewGameController {
     NewGameOptions options = new NewGameOptions(playerCount);
     GameEntity gameEntity = gameFactory.apply(options);
     String playerToken = gameJoiner.joinGame(gameEntity, new JoinGameParameters(playerName));
-    gameDaoProvider.getGameDao(ModelParametersProvider.EMPTY).storeGame(gameEntity);
+    gameDaoProvider.getGameDao(RequestContext.EMPTY).storeGame(gameEntity);
 
     return new GameRef(gameEntity.getId(), playerToken);
   }
