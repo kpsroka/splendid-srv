@@ -15,8 +15,6 @@
 
 package net.rk.splendid;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import net.rk.splendid.dao.GameDao;
 import net.rk.splendid.dao.entities.*;
@@ -32,10 +30,13 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static net.rk.splendid.AssertionHelper.assertStringEquality;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.same;
 
 @RunWith(JUnit4.class)
 public class GameDataControllerTest {
@@ -193,15 +194,5 @@ public class GameDataControllerTest {
 
   private ArgumentMatcher<JoinGameParameters> hasPlayerName(String playerName) {
     return joinGameParameters -> joinGameParameters.getPlayerName().equals(playerName);
-  }
-
-  private void assertStringEquality(Object expectedObject, Object actualObject) {
-    try {
-      String expectedString = new ObjectMapper().writeValueAsString(expectedObject);
-      String actualString = new ObjectMapper().writeValueAsString(actualObject);
-      Assert.assertEquals(expectedString, actualString);
-    } catch (JsonProcessingException exception) {
-      Assert.fail(exception.getMessage());
-    }
   }
 }
