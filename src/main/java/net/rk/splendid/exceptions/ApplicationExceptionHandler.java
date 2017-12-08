@@ -15,7 +15,9 @@
 
 package net.rk.splendid.exceptions;
 
+import net.rk.splendid.shared.Constants;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,28 +30,29 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public final class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
   @ExceptionHandler
   public ResponseEntity<Object> handleException(RuntimeException exception, WebRequest request) {
+    HttpHeaders headers = new HttpHeaders();
     if (exception.getMessage() != null && !exception.getMessage().isEmpty()) {
+      headers.set(Constants.UI_MESSAGE_HEADER, exception.getMessage());
       return handleExceptionInternal(
           exception,
           exception.getMessage(),
-          null,
+          headers,
           HttpStatus.BAD_REQUEST,
           request);
     } else {
       ResponseStatus status =
           AnnotationUtils.findAnnotation(exception.getClass(), ResponseStatus.class);
       if (status != null) {
+        headers.set(Constants.UI_MESSAGE_HEADER, status.reason());
         return super.handleExceptionInternal(
             exception,
             status.reason(),
-            null,
+            headers,
             status.code(),
             request);
       } else {
         return super.handleException(exception, request);
       }
-
     }
-
   }
 }
