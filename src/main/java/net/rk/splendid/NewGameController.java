@@ -21,6 +21,7 @@ import net.rk.splendid.exceptions.PlayerCountOutOfRangeException;
 import net.rk.splendid.exceptions.PlayerNameEmptyException;
 import net.rk.splendid.game.*;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +42,13 @@ public final class NewGameController {
     this.gameFactory = gameFactory;
     this.gameDaoProvider = gameDaoProvider;
     this.gameJoiner = gameJoiner;
+  }
+
+  @RequestMapping(value = "/g", method = RequestMethod.POST)
+  public GameRef newGameRest(
+      @RequestParam("playerName") String playerName,
+      @RequestParam("playerCount") int playerCount) {
+    return newGame(playerName, playerCount);
   }
 
   @RequestMapping("/new")
