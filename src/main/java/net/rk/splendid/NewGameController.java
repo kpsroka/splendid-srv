@@ -45,13 +45,6 @@ public final class NewGameController {
   }
 
   @RequestMapping(value = "/g", method = RequestMethod.POST)
-  public GameRef newGameRest(
-      @RequestParam("playerName") String playerName,
-      @RequestParam("playerCount") int playerCount) {
-    return newGame(playerName, playerCount);
-  }
-
-  @RequestMapping("/new")
   public GameRef newGame(
       @RequestParam("playerName") String playerName,
       @RequestParam("playerCount") int playerCount) {
